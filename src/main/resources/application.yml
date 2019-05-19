@@ -1,0 +1,6 @@
+gcp:
+  project-id: email-service-241013
+  pub-sub:
+    topic-name: email-messages-queue
+    subscription: email-messages-queue-subscription
+    verification-token: <<VERIFICATION_TOKEN>>
