@@ -22,6 +22,8 @@ import java.util.logging.Logger;
 @Component
 public class EmailMessagePublisherService {
 
+    private static final Logger log = Logger.getLogger(EmailMessagePublisherService.class.getName());
+
     @Value("${gcp.project-id}")
     private String projectId;
 
@@ -29,8 +31,6 @@ public class EmailMessagePublisherService {
     private String topicName;
 
     private Publisher emailMessagePublisher;
-
-    private static final Logger log = Logger.getLogger(EmailMessagePublisherService.class.getName());
 
     public void publish(EmailMessage message) {
         try {

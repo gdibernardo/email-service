@@ -6,10 +6,10 @@ import com.gdibernardo.emailservice.util.Utils;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -19,13 +19,14 @@ import java.util.stream.Collectors;
 @RestController
 public class EmailMessagePushReceiver {
 
-    @Value("${gcp.pub-sub.verification-token}")
-    private String pubSubVerificationToken;
+    private static final Logger log = Logger.getLogger(EmailMessagePushReceiver.class.getName());
+
+    private static final String PUBSUB_VERIFICATION_TOKEN = "PUBSUB_VERIFICATION_TOKEN";
 
     @Autowired
     private EmailSenderService emailSenderService;
 
-    private static final Logger log = Logger.getLogger(EmailMessagePushReceiver.class.getName());
+    private String pubSubVerificationToken;
 
     @PostMapping("/pubsub/push")
     public void pubSubPushReceive(HttpServletRequest request, HttpServletResponse response) throws IOException {
@@ -45,11 +46,22 @@ public class EmailMessagePushReceiver {
                 .getAsString();
 
         try {
+
             EmailMessage receivedMessage = EmailMessage.fromJSONString(Utils.decodeBase64(messageData));
-            emailSenderService.send(receivedMessage);
+
+            if(!emailSenderService.send(receivedMessage)) {
+                response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            }
+
         } catch (Exception exception) {
             log.warning("EmailMessagePushReceiver: Cannot parse received message.");
             log.warning("" + exception.getLocalizedMessage());
+            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
         }
+    }
+
+    @PostConstruct
+    private void loadPubSubVerificationToken() {
+        pubSubVerificationToken = System.getenv(PUBSUB_VERIFICATION_TOKEN);
     }
 }

@@ -18,7 +18,6 @@ public class EmailMessage {
     private String subject;
     private String content;
 
-
     private EmailMessage() {}
 
     public EmailMessage(String id, String from, String to, String subject, String content) {
@@ -38,6 +37,10 @@ public class EmailMessage {
         return from;
     }
 
+    public void setFrom(String from) {
+        this.from = from;
+    }
+
     public String getTo() {
         return to;
     }
@@ -50,6 +53,21 @@ public class EmailMessage {
         return content;
     }
 
+    public PubsubMessage toPubSubMessage() throws JsonProcessingException {
+        return PubsubMessage.newBuilder().setData(ByteString.copyFromUtf8(toJSON())).build();
+    }
+
+    @Override
+    public String toString() {
+        return "EmailMessage{" +
+                "id='" + id + '\'' +
+                ", from='" + from + '\'' +
+                ", to='" + to + '\'' +
+                ", subject='" + subject + '\'' +
+                ", content='" + content + '\'' +
+                '}';
+    }
+
     public static EmailMessage fromEmail(Email email) {
         return new EmailMessage(UUID.randomUUID().toString(),
                 email.getFrom(),
@@ -60,10 +78,6 @@ public class EmailMessage {
 
     public static EmailMessage fromJSONString(String jsonString) throws Exception {
         return new ObjectMapper().readValue(jsonString, EmailMessage.class);
-    }
-
-    public PubsubMessage toPubSubMessage() throws JsonProcessingException {
-        return PubsubMessage.newBuilder().setData(ByteString.copyFromUtf8(toJSON())).build();
     }
 
     private String toJSON() throws JsonProcessingException {

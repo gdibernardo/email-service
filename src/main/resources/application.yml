@@ -3,4 +3,5 @@ gcp:
   pub-sub:
     topic-name: email-messages-queue
     subscription: email-messages-queue-subscription
-    verification-token: <<VERIFICATION_TOKEN>>
+
+email-system-sender: <<EMAIL_SYSTEM_SENDER>>

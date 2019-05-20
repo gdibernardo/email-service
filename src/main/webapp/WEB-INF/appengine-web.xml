@@ -20,4 +20,10 @@ limitations under the License.
   <manual-scaling>
     <instances>1</instances>
   </manual-scaling>
+  <env-variables>
+    <env-var name="SENDGRID_API_KEY" value="<<SENDGRID_API_KEY>>" />
+    <env-var name="MAILJET_API_KEY" value="<<MAILJET_API_KEY>>" />
+    <env-var name="MAILJET_SECRET_KEY" value="<<MAILJET_SECRET_KEY>>" />
+    <env-var name="PUBSUB_VERIFICATION_TOKEN" value="<<PUBSUB_VERIFICATION_TOKEN>>" />
+  </env-variables>
 </appengine-web-app>
