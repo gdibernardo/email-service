@@ -4,7 +4,7 @@ import com.gdibernardo.emailservice.email.service.clients.EmailClient;
 import com.gdibernardo.emailservice.email.service.clients.EmailClientNotAvailableException;
 import com.gdibernardo.emailservice.email.service.clients.MailjetEmailClient;
 import com.gdibernardo.emailservice.email.service.clients.SendGridEmailClient;
-import com.gdibernardo.emailservice.pubsub.EmailMessage;
+import com.gdibernardo.emailservice.email.EmailMessage;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 

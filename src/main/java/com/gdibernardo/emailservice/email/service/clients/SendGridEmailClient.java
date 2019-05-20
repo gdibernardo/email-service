@@ -1,6 +1,6 @@
 package com.gdibernardo.emailservice.email.service.clients;
 
-import com.gdibernardo.emailservice.pubsub.EmailMessage;
+import com.gdibernardo.emailservice.email.EmailMessage;
 import com.sendgrid.*;
 
 import java.io.IOException;

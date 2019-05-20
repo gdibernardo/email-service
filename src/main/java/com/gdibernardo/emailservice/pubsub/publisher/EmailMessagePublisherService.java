@@ -13,7 +13,7 @@ import com.google.pubsub.v1.PubsubMessage;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
-import com.gdibernardo.emailservice.pubsub.EmailMessage;
+import com.gdibernardo.emailservice.email.EmailMessage;
 import org.threeten.bp.Duration;
 
 import javax.annotation.PostConstruct;

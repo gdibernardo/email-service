@@ -1,6 +1,6 @@
 package com.gdibernardo.emailservice.email.service.clients;
 
-import com.gdibernardo.emailservice.pubsub.EmailMessage;
+import com.gdibernardo.emailservice.email.EmailMessage;
 import com.mailjet.client.MailjetClient;
 import com.mailjet.client.MailjetRequest;
 import com.mailjet.client.MailjetResponse;

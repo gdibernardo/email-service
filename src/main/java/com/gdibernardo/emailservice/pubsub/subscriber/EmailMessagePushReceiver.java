@@ -1,7 +1,7 @@
 package com.gdibernardo.emailservice.pubsub.subscriber;
 
 import com.gdibernardo.emailservice.email.service.EmailSenderService;
-import com.gdibernardo.emailservice.pubsub.EmailMessage;
+import com.gdibernardo.emailservice.email.EmailMessage;
 import com.gdibernardo.emailservice.util.Utils;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;

@@ -1,8 +1,7 @@
 package com.gdibernardo.emailservice.email.api;
 
 import com.gdibernardo.emailservice.email.EmailValidator;
-import com.gdibernardo.emailservice.email.service.EmailSenderService;
-import com.gdibernardo.emailservice.pubsub.EmailMessage;
+import com.gdibernardo.emailservice.email.EmailMessage;
 import com.gdibernardo.emailservice.pubsub.publisher.EmailMessagePublisherService;
 
 import org.springframework.beans.factory.annotation.Autowired;

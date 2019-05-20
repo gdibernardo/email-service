@@ -1,4 +1,4 @@
-package com.gdibernardo.emailservice.pubsub;
+package com.gdibernardo.emailservice.email;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
