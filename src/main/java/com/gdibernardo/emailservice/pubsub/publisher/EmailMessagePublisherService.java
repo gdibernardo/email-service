@@ -13,7 +13,7 @@ import com.google.pubsub.v1.PubsubMessage;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
-import com.gdibernardo.emailservice.email.EmailMessage;
+import com.gdibernardo.emailservice.email.model.EmailMessage;
 import org.threeten.bp.Duration;
 
 import javax.annotation.PostConstruct;
@@ -42,7 +42,7 @@ public class EmailMessagePublisherService {
                     new ApiFutureCallback<String>() {
                         @Override
                         public void onFailure(Throwable throwable) {
-                            log.warning("Failed sending message to PubSub.");
+                            log.warning("Failed sending message to PubSub. " + throwable.getMessage());
                         }
 
                         @Override
@@ -75,7 +75,7 @@ public class EmailMessagePublisherService {
         Duration retryDelay = Duration.ofMillis(5);             // default: 5 ms
 
         double retryDelayMultiplier = 2.0;                      // back off for repeated failures, default: 2.0
-        Duration maxRetryDelay = Duration.ofSeconds(600);       // default : Long.MAX_VALUE
+        Duration maxRetryDelay = Duration.ofSeconds(60);       // default : Long.MAX_VALUE
         Duration totalTimeout = Duration.ofSeconds(10);         // default: 10 seconds
         Duration initialRpcTimeout = Duration.ofSeconds(10);    // default: 10 seconds
         Duration maxRpcTimeout = Duration.ofSeconds(10);        // default: 10 seconds

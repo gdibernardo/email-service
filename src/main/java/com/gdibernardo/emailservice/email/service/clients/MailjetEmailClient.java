@@ -1,6 +1,6 @@
 package com.gdibernardo.emailservice.email.service.clients;
 
-import com.gdibernardo.emailservice.email.EmailMessage;
+import com.gdibernardo.emailservice.email.model.EmailMessage;
 import com.mailjet.client.MailjetClient;
 import com.mailjet.client.MailjetRequest;
 import com.mailjet.client.MailjetResponse;
@@ -25,8 +25,9 @@ public class MailjetEmailClient implements EmailClient {
         log.info(String.format("Sending email %s from Mailjet email client.", emailMessage.toString()));
 
         MailjetRequest request = new MailjetRequest(Email.resource)
-                .property(Email.FROMEMAIL, emailMessage.getFrom())
-                .property(Email.TO, emailMessage.getTo())
+                .property(Email.FROMEMAIL, emailMessage.getFrom().getAddress())
+                .property(Email.FROMNAME, emailMessage.getFrom().getName())
+                .property(Email.TO, emailMessage.getTo().getAddress())
                 .property(Email.SUBJECT, emailMessage.getSubject())
                 .property(Email.TEXTPART, emailMessage.getContent());
         try {

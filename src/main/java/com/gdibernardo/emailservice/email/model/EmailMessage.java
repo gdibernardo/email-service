@@ -1,9 +1,10 @@
-package com.gdibernardo.emailservice.email;
+package com.gdibernardo.emailservice.email.model;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import com.gdibernardo.emailservice.email.api.Email;
+
 
 import com.google.protobuf.ByteString;
 import com.google.pubsub.v1.PubsubMessage;
@@ -13,14 +14,14 @@ import java.util.UUID;
 public class EmailMessage {
     private String id;
 
-    private String from;
-    private String to;
+    private EmailAddress from;
+    private EmailAddress to;
     private String subject;
     private String content;
 
     private EmailMessage() {}
 
-    public EmailMessage(String id, String from, String to, String subject, String content) {
+    public EmailMessage(String id, EmailAddress from, EmailAddress to, String subject, String content) {
         this.id = id;
 
         this.from = from;
@@ -33,15 +34,15 @@ public class EmailMessage {
         return id;
     }
 
-    public String getFrom() {
+    public EmailAddress getFrom() {
         return from;
     }
 
-    public void setFrom(String from) {
+    public void setFrom(EmailAddress from) {
         this.from = from;
     }
 
-    public String getTo() {
+    public EmailAddress getTo() {
         return to;
     }
 
@@ -61,8 +62,8 @@ public class EmailMessage {
     public String toString() {
         return "EmailMessage{" +
                 "id='" + id + '\'' +
-                ", from='" + from + '\'' +
-                ", to='" + to + '\'' +
+                ", from='" + from.getAddress() + '\'' +
+                ", to='" + to.getAddress() + '\'' +
                 ", subject='" + subject + '\'' +
                 ", content='" + content + '\'' +
                 '}';

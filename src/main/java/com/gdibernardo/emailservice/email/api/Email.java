@@ -1,20 +1,22 @@
 package com.gdibernardo.emailservice.email.api;
 
+import com.gdibernardo.emailservice.email.model.EmailAddress;
+
 import javax.validation.constraints.NotNull;
 
 public class Email {
 
-    private String to;
-    private String from;
+    private EmailAddress to;
+    private EmailAddress from;
     @NotNull(message = "Subject is a mandatory field.")
     private String subject;
     @NotNull(message = "Content is a mandatory field.")
     private String content;
 
-    public void setTo(String to) {
+    public void setTo(EmailAddress to) {
         this.to = to;
     }
-    public String getTo() {
+    public EmailAddress getTo() {
         return to;
     }
 
@@ -25,10 +27,10 @@ public class Email {
         return content;
     }
 
-    public void setFrom(String from) {
+    public void setFrom(EmailAddress from) {
         this.from = from;
     }
-    public String getFrom() {
+    public EmailAddress getFrom() {
         return from;
     }
 

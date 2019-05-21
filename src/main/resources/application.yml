@@ -4,4 +4,5 @@ gcp:
     topic-name: email-messages-queue
     subscription: email-messages-queue-subscription
 
-email-system-sender: <<EMAIL_SYSTEM_SENDER>>
+email-system-sender:
+  address: <<EMAIL_SYSTEM_SENDER>>

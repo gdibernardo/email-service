@@ -1,10 +1,11 @@
 package com.gdibernardo.emailservice.email.service;
 
+import com.gdibernardo.emailservice.email.model.EmailAddress;
 import com.gdibernardo.emailservice.email.service.clients.EmailClient;
 import com.gdibernardo.emailservice.email.service.clients.EmailClientNotAvailableException;
 import com.gdibernardo.emailservice.email.service.clients.MailjetEmailClient;
 import com.gdibernardo.emailservice.email.service.clients.SendGridEmailClient;
-import com.gdibernardo.emailservice.email.EmailMessage;
+import com.gdibernardo.emailservice.email.model.EmailMessage;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -18,8 +19,8 @@ public class EmailSenderService {
 
     private static final Logger log = Logger.getLogger(EmailSenderService.class.getName());
 
-    @Value("${email-system-sender}")
-    private String emailSystemSender;
+    @Value("${email-system-sender.address}")
+    private String emailAddressSystemSender;
 
     private List<EmailClient> emailClients = new LinkedList<>();
 
@@ -31,7 +32,7 @@ public class EmailSenderService {
 
     public boolean send(EmailMessage emailMessage) {
 
-        emailMessage.setFrom(emailSystemSender);
+        setSystemSenderFrom(emailMessage);
 
         for(EmailClient emailClient : emailClients) {
             log.info(String.format("EmailSenderService: trying sending email from %s.", emailClient.getClass().getSimpleName()));
@@ -46,5 +47,13 @@ public class EmailSenderService {
 
         log.info(String.format("Email %s has not been sent.", emailMessage.toString()));
         return false;
+    }
+
+    private void setSystemSenderFrom(EmailMessage clientEmailMessage) {
+        EmailAddress systemSender = new EmailAddress(emailAddressSystemSender);
+        if(clientEmailMessage.getFrom() != null && clientEmailMessage.getFrom().isNameSet()) {
+            systemSender.setName(clientEmailMessage.getFrom().getName());
+        }
+        clientEmailMessage.setFrom(systemSender);
     }
 }

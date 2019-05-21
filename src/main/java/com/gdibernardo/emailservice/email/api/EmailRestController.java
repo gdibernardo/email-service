@@ -1,7 +1,7 @@
 package com.gdibernardo.emailservice.email.api;
 
 import com.gdibernardo.emailservice.email.EmailValidator;
-import com.gdibernardo.emailservice.email.EmailMessage;
+import com.gdibernardo.emailservice.email.model.EmailMessage;
 import com.gdibernardo.emailservice.pubsub.publisher.EmailMessagePublisherService;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +21,7 @@ public class EmailRestController {
     @PostMapping("/send")
     public ResponseEntity<String> send(@Valid @RequestBody Email email) {
 
-        if(EmailValidator.isValid(email.getTo())) {
+        if(EmailValidator.isValid(email.getTo().getAddress())) {
             emailMessagePublisherService.publish(EmailMessage.fromEmail(email));
             return ResponseEntity.ok("Email received.");
         }
