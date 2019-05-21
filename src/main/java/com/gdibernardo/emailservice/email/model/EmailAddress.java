@@ -5,6 +5,8 @@ public class EmailAddress {
     private String address;
     private String name;
 
+    EmailAddress() {}
+
     public EmailAddress(String address) {
         this.address = address;
     }
@@ -29,7 +31,7 @@ public class EmailAddress {
         return name;
     }
 
-    public boolean isNameSet() {
+    public Boolean hasName() {
         return (name != null && !name.trim().isEmpty());
     }
 }

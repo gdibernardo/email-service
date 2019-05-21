@@ -1,4 +1,4 @@
-package com.gdibernardo.emailservice.email.api;
+package com.gdibernardo.emailservice.email.rest;
 
 import com.gdibernardo.emailservice.email.model.EmailAddress;
 

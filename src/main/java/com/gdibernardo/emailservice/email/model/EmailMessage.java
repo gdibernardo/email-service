@@ -3,7 +3,7 @@ package com.gdibernardo.emailservice.email.model;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import com.gdibernardo.emailservice.email.api.Email;
+import com.gdibernardo.emailservice.email.rest.Email;
 
 
 import com.google.protobuf.ByteString;
@@ -19,7 +19,7 @@ public class EmailMessage {
     private String subject;
     private String content;
 
-    private EmailMessage() {}
+    EmailMessage() {}
 
     public EmailMessage(String id, EmailAddress from, EmailAddress to, String subject, String content) {
         this.id = id;
@@ -60,12 +60,12 @@ public class EmailMessage {
 
     @Override
     public String toString() {
-        return "EmailMessage{" +
-                "id='" + id + '\'' +
-                ", from='" + from.getAddress() + '\'' +
-                ", to='" + to.getAddress() + '\'' +
-                ", subject='" + subject + '\'' +
-                ", content='" + content + '\'' +
+        return "EmailMessage {" +
+                "id='"          + id                    + '\'' +
+                ", from='"      + from.getAddress()     + '\'' +
+                ", to='"        + to.getAddress()       + '\'' +
+                ", subject='"   + subject               + '\'' +
+                ", content='"   + content               + '\'' +
                 '}';
     }
 

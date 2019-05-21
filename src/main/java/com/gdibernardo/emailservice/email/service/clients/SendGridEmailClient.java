@@ -24,7 +24,7 @@ public class SendGridEmailClient implements EmailClient {
     public void sendEmail(EmailMessage emailMessage) throws EmailClientNotAvailableException {
         log.info(String.format("Sending email %s from SendGrid email client.", emailMessage.toString()));
 
-        Email to = new Email(emailMessage.getFrom().getAddress());
+        Email to = new Email(emailMessage.getTo().getAddress());
         Email from = new Email(emailMessage.getFrom().getAddress(), emailMessage.getFrom().getName());
 
         //  Our service will support only text/plain content for now.

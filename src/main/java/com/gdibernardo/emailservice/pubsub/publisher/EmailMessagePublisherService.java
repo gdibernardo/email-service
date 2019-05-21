@@ -1,12 +1,10 @@
 package com.gdibernardo.emailservice.pubsub.publisher;
 
+import com.gdibernardo.emailservice.email.model.EmailAddress;
 import com.google.api.core.ApiFuture;
-import com.google.api.core.ApiFutureCallback;
-import com.google.api.core.ApiFutures;
 import com.google.api.gax.core.InstantiatingExecutorProvider;
 import com.google.api.gax.retrying.RetrySettings;
 import com.google.cloud.pubsub.v1.Publisher;
-import com.google.common.util.concurrent.MoreExecutors;
 import com.google.pubsub.v1.ProjectTopicName;
 import com.google.pubsub.v1.PubsubMessage;
 
@@ -24,6 +22,9 @@ public class EmailMessagePublisherService {
 
     private static final Logger log = Logger.getLogger(EmailMessagePublisherService.class.getName());
 
+    @Value("${email-system-sender.address}")
+    private String emailAddressSystemSender;
+
     @Value("${gcp.project-id}")
     private String projectId;
 
@@ -32,28 +33,24 @@ public class EmailMessagePublisherService {
 
     private Publisher emailMessagePublisher;
 
-    public void publish(EmailMessage message) {
-        try {
 
+    public boolean publish(EmailMessage message) {
+
+        setSystemSender(message);
+
+        try {
             PubsubMessage pubsubMessage = message.toPubSubMessage();
             ApiFuture<String> future = emailMessagePublisher.publish(pubsubMessage);
 
-            ApiFutures.addCallback(future,
-                    new ApiFutureCallback<String>() {
-                        @Override
-                        public void onFailure(Throwable throwable) {
-                            log.warning("Failed sending message to PubSub. " + throwable.getMessage());
-                        }
+            String messageId = future.get();
 
-                        @Override
-                        public void onSuccess(String messageId) {
-                            log.info(String.format("Successfully sent message with id %s", messageId));
-                        }
-                    },
-                    MoreExecutors.directExecutor());
+            log.info(String.format("EmailMessagePublisherService: published message with id %s to Pub/Sub.", messageId));
+
+            return true;
 
         } catch (Exception exception) {
-            log.warning("EmailMessagePublisherService: Failed while trying to publish a message.");
+            log.warning(String.format("EmailMessagePublisherService: Failed while trying to publish a message. Exception: %s", exception.getMessage()));
+            return false;
         }
     }
 
@@ -88,5 +85,13 @@ public class EmailMessagePublisherService {
                 .setInitialRpcTimeout(initialRpcTimeout)
                 .setMaxRpcTimeout(maxRpcTimeout)
                 .build();
+    }
+
+    private void setSystemSender(EmailMessage clientEmailMessage) {
+        EmailAddress systemSender = new EmailAddress(emailAddressSystemSender);
+        if(clientEmailMessage.getFrom() != null && clientEmailMessage.getFrom().hasName()) {
+            systemSender.setName(clientEmailMessage.getFrom().getName());
+        }
+        clientEmailMessage.setFrom(systemSender);
     }
 }
