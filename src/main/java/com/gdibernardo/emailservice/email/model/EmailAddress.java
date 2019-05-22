@@ -21,14 +21,14 @@ public class EmailAddress {
         this.address = address;
     }
     public String getAddress() {
-        return address;
+        return (address == null) ? new String() : address;
     }
 
     public void setName(String name) {
         this.name = name;
     }
     public String getName() {
-        return name;
+        return (name == null) ? new String() : name;
     }
 
     public Boolean hasName() {

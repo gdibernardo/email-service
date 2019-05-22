@@ -2,15 +2,17 @@ package com.gdibernardo.emailservice.email.rest;
 
 import com.gdibernardo.emailservice.email.model.EmailAddress;
 
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 public class Email {
 
+    @NotNull(message = "To email address is a mandatory field.")
     private EmailAddress to;
     private EmailAddress from;
-    @NotNull(message = "Subject is a mandatory field.")
+    @NotBlank(message = "Subject is a mandatory field.")
     private String subject;
-    @NotNull(message = "Content is a mandatory field.")
+    @NotBlank(message = "Content is a mandatory field.")
     private String content;
 
     public void setTo(EmailAddress to) {
@@ -18,13 +20,6 @@ public class Email {
     }
     public EmailAddress getTo() {
         return to;
-    }
-
-    public void setContent(String content) {
-        this.content = content;
-    }
-    public String getContent() {
-        return content;
     }
 
     public void setFrom(EmailAddress from) {
@@ -39,5 +34,12 @@ public class Email {
     }
     public String getSubject() {
         return subject;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
+    }
+    public String getContent() {
+        return content;
     }
 }

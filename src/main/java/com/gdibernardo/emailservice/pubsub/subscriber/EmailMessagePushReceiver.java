@@ -48,7 +48,7 @@ public class EmailMessagePushReceiver {
         try {
 
             EmailMessage receivedMessage = EmailMessage.fromJSONString(Utils.decodeBase64(messageData));
-
+            log.info(String.format("EmailMessagePushReceiver: Received message %s", receivedMessage.toString()));
             if(!emailSenderService.send(receivedMessage)) {
                 response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
             }

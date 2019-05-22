@@ -44,7 +44,7 @@ public class EmailMessagePublisherService {
 
             String messageId = future.get();
 
-            log.info(String.format("EmailMessagePublisherService: published message with id %s to Pub/Sub.", messageId));
+            log.info(String.format("EmailMessagePublisherService: published message %s with id %s to Pub/Sub.", message.toString(), messageId));
 
             return true;
 

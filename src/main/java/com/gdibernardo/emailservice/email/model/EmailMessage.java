@@ -62,8 +62,8 @@ public class EmailMessage {
     public String toString() {
         return "EmailMessage {" +
                 "id='"          + id                    + '\'' +
-                ", from='"      + from.getAddress()     + '\'' +
-                ", to='"        + to.getAddress()       + '\'' +
+                ", from='"      + from.getAddress()     + " - " + from.getName() + '\'' +
+                ", to='"        + to.getAddress()       + " - " + to.getName()   + '\'' +
                 ", subject='"   + subject               + '\'' +
                 ", content='"   + content               + '\'' +
                 '}';

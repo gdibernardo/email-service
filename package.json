@@ -1,0 +1,26 @@
+{
+  "name": "Email-service",
+  "version": "0.1.0",
+  "description": "Email service for the Uber coding challange",
+  "author": "Gabriele Di Bernardo",
+  "license": "Apache-2.0",
+  "dependencies": {
+    "axios": "^0.18.0",
+    "balanced-match": "^1.0.0",
+    "react": "^16.5.2",
+    "react-dom": "^16.5.2",
+    "rest": "^1.3.1"
+  },
+  "scripts": {
+    "watch": "webpack --watch -d"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.1.0",
+    "@babel/preset-env": "^7.1.0",
+    "@babel/preset-react": "^7.0.0",
+    "babel-loader": "^8.0.2",
+    "webpack": "^4.32.1",
+    "webpack-cli": "^3.3.2",
+    "webpack-dev-server": "^3.4.1"
+  }
+}
