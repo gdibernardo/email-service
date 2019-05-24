@@ -25,6 +25,10 @@ public class EmailSenderService {
         emailClients.add(new MailjetEmailClient());
     }
 
+    public void addEmailClient(EmailClient emailClient) {
+        emailClients.add(emailClient);
+    }
+
     public boolean send(EmailMessage emailMessage) {
 
         for(EmailClient emailClient : emailClients) {
@@ -34,7 +38,7 @@ public class EmailSenderService {
                 log.info(String.format("Email %s sent correctly.", emailMessage.toString()));
                 return true;
             } catch (EmailClientNotAvailableException exception) {
-                log.warning(exception.getMessage());
+                log.warning(String.format("Email client raised an exception %s", exception.getMessage()));
             }
         }
 

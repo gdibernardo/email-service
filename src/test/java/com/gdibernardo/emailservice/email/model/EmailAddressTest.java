@@ -14,7 +14,7 @@ public class EmailAddressTest {
 
     @Test
     public void GivenEmailAddressWithEmptyName_WhenIsSetNameCalled_ReturnFalse() {
-        EmailAddress emailAddress = new EmailAddress("empty@emoty.com", "      ");
+        EmailAddress emailAddress = new EmailAddress("empty@youremptyprovider.com", "      ");
 
         Assert.assertEquals(emailAddress.hasName(), false);
     }

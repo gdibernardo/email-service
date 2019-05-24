@@ -2,10 +2,7 @@ package com.gdibernardo.emailservice.email.model;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-
 import com.gdibernardo.emailservice.email.rest.Email;
-
-
 import com.google.protobuf.ByteString;
 import com.google.pubsub.v1.PubsubMessage;
 
