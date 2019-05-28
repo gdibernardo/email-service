@@ -3,7 +3,7 @@ For the Uber coding challenge (https://github.com/uber-archive/coding-challenge-
 
 The Email Service is powered by the following email providers:
 
-- **Sendgrid** (https://www.sendgrid.com)
+- **SendGrid** (https://www.sendgrid.com)
 
 - **Mailjet** (https://www.mailjet.com)
 
@@ -20,7 +20,7 @@ In order to run the application on your local environment, you need to:
  
 - Install the App Engine component.
 - Enable Pub/Sub and create a valid topic and subscription. The subscription has to be of **push** type; the push endpoint is: /pubsub/push?token=**YOUR-SECRET-TOKEN** (we recommend to use a strong security token).
-- Create an account on Sendgrid and Mailjet.
+- Create an account on SendGrid and Mailjet.
 
 Furthermore, you need to setup the app configuration in the following files:
 - src/main/webapp/WEB-INF/appengine-web.xml 
