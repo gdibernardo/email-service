@@ -19,7 +19,7 @@ The application is able to detect if one of the email providers is not available
 In order to run the application on your local environment, you need to: 
  
 - Install the App Engine component.
-- Enable Pub/Sub and create a valid topic and subscription. The subscription has to be of **push** type; the push endpoint is: /pubsub/push?token=**YOUR-SECRET-TOKEN**.
+- Enable Pub/Sub and create a valid topic and subscription. The subscription has to be of **push** type; the push endpoint is: /pubsub/push?token=**YOUR-SECRET-TOKEN** (We recommend to use a strong security token.
 - Create an account on Sendgrid and Mailjet.
 
 Furthermore, you need to setup the app configuration in the following files:
@@ -75,7 +75,7 @@ POST /emails/submit
 }
 ```
 
-The `name` field is optional in both the `to` and `from` parameter. The `address` field in `from` object can be omitted. **DO NOTE**: Because Mailjet requires to validate the sender email address, the application will use a system sender email address when sending an email. However, the user can still specify its name.
+The `name` field is optional in both the `to` (can be omitted) and `from` parameter. The `address` field in `from` object can be omitted. **DO NOTE**: Because Mailjet requires to validate the sender email address, the application will use a system sender email address when sending an email. However, the user can still specify its name.
 
 The `subject` and `content` fields are mandatory for this version of the API.
 
