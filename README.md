@@ -19,7 +19,7 @@ The application is able to detect if one of the email providers is not available
 In order to run the application on your local environment, you need to: 
  
 - Install the App Engine component.
-- Enable Pub/Sub and create a valid topic and subscription. The subscription has to be of **push** type; the push endpoint is: /pubsub/push?token=**YOUR-SECRET-TOKEN** (We recommend to use a strong security token.
+- Enable Pub/Sub and create a valid topic and subscription. The subscription has to be of **push** type; the push endpoint is: /pubsub/push?token=**YOUR-SECRET-TOKEN** (we recommend to use a strong security token).
 - Create an account on Sendgrid and Mailjet.
 
 Furthermore, you need to setup the app configuration in the following files:
