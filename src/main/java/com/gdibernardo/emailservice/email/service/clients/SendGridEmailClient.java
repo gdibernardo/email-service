@@ -33,13 +33,11 @@ public class SendGridEmailClient implements EmailClient {
 
         Request request = new Request();
         try {
-            // Set request configuration.
             request.setMethod(Method.POST);
             request.setEndpoint(SENDGRID_SEND_ENDPOINT);
 
             request.setBody(mail.build());
 
-            // Use the client to send the API request.
             Response response = sendGrid.api(request);
 
             if (response.getStatusCode() != 202) {

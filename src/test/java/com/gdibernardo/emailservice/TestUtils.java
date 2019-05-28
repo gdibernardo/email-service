@@ -10,7 +10,7 @@ public final class TestUtils {
         EmailAddress from = new EmailAddress("mary@provider.com", "Mary");
         EmailAddress to = new EmailAddress("jack@provider.com", "Jack");
 
-        return new EmailMessage("id", from, to, "It's not you, it is me.", "It does not work anymore.");
+        return new EmailMessage(from, to, "It's not you, it is me.", "It does not work anymore.");
     }
 
     public static EmailMessage emailMessage(String fromAddress,
@@ -20,8 +20,7 @@ public final class TestUtils {
                                             String subject,
                                             String content) {
 
-        return new EmailMessage("id",
-                new EmailAddress(fromAddress, fromName),
+        return new EmailMessage(new EmailAddress(fromAddress, fromName),
                 new EmailAddress(toAddress, toName),
                 subject,
                 content);

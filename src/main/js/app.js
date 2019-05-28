@@ -21,30 +21,30 @@ class App extends React.Component {
         return regex.test(String(email).toLowerCase());
     }
 
-    handleFormSubmit( event ) {
+    handleFormSubmit(event) {
       event.preventDefault();
       console.log(this.state);
 
       if(!this.state.from.name || this.state.from.name.trim() === '') {
-        console.log("From field");
-        window.alert("From field is empty.");
+        console.log("From field is not set.");
+        window.alert("The from name of the email is not set");
         return;
       }
 
       if(!this.validateEmail(this.state.to.address)) {
-        console.log("To email is invalid");
-        window.alert("To email address is invalid.");
+        console.log("To email address field is invalid");
+        window.alert("To email address field is invalid.");
         return;
       }
 
       if(!this.state.subject || this.state.subject.trim() === '') {
-        console.log("Subject is not set.")
+        console.log("Subject field is not set.")
         window.alert("The subject of the email is not set.")
         return;
       }
 
     if(!this.state.content || this.state.content.trim() === '') {
-        console.log("Content is not set.")
+        console.log("Content field is not set.")
         window.alert("The content of the email is not set.")
         return;
       }
@@ -61,7 +61,7 @@ class App extends React.Component {
           })
           .catch(error => {
             window.alert("Something very bad and sad happened: " + error.message);
-            console.log("error " + error.message);
+            console.log("Error: " + error.message);
           });
     }
 
@@ -72,17 +72,17 @@ class App extends React.Component {
         <div>
             <form action="#" >
               <label>From</label>
-              <input type="text" id="fromid" name="from" placeholder="Sender name."
+              <input type="text" id="fromid" name="from" placeholder="Who is sending this email? This is just your name.."
                 value={this.state.from.name}
                 onChange={e => this.setState({ from: {'name': e.target.value} })}
               />
               <label>Recipient</label>
-              <input type="email" id="toid" name="to" placeholder="Email recipient."
+              <input type="email" id="toid" name="to" placeholder="Recipient's email address."
                 value={this.state.to.address}
                 onChange={e => this.setState({ to: {'address': e.target.value} })}
               />
               <label>Subject</label>
-              <input type="text" id="subjectid" name="subject" placeholder="Subject."
+              <input type="text" id="subjectid" name="subject" placeholder="The subject of your email.."
                 value={this.state.subject}
                 onChange={e => this.setState({ subject: e.target.value })}
               />

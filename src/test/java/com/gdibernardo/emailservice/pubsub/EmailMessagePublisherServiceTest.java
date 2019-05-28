@@ -17,11 +17,11 @@ import static org.mockito.Mockito.*;
 public class EmailMessagePublisherServiceTest {
 
     @Test
-    public void ShouldEmailMessage_Published_Correctly() throws Exception {
+    public void EmailMessage_ShouldBePublished_Correctly() throws Exception {
         Publisher publisher = mock(Publisher.class);
 
         EmailMessagePublisherService emailMessagePublisherService = new EmailMessagePublisherService(publisher,
-                "systemsender@me.io");
+                "systemsender@sender.io");
 
         ApiFuture<String> apiFuture = mock(ApiFuture.class);
         when(apiFuture.get()).thenReturn("message-id-00");
@@ -35,11 +35,11 @@ public class EmailMessagePublisherServiceTest {
     }
 
     @Test
-    public void Given_FailingPublisher_WhenPublishing_ReturnFalse() throws Exception {
+    public void GivenFailingPublisher_WhenPublishing_ReturnFalse() throws Exception {
         Publisher publisher = mock(Publisher.class);
 
         EmailMessagePublisherService emailMessagePublisherService = new EmailMessagePublisherService(publisher,
-                "systemsender@me.io");
+                "systemsender@sender.io");
 
         ApiFuture<String> apiFuture = mock(ApiFuture.class);
         doThrow(ExecutionException.class)
@@ -58,7 +58,7 @@ public class EmailMessagePublisherServiceTest {
         Publisher publisher = mock(Publisher.class);
 
         EmailMessagePublisherService emailMessagePublisherService = new EmailMessagePublisherService(publisher,
-                "systemsender@me.io");
+                "systemsender@sender.io");
 
         ApiFuture<String> apiFuture = mock(ApiFuture.class);
         when(apiFuture.get()).thenReturn("message-id-00");
@@ -72,17 +72,17 @@ public class EmailMessagePublisherServiceTest {
         ArgumentCaptor<PubsubMessage> argumentCaptor = ArgumentCaptor.forClass(PubsubMessage.class);
         verify(publisher, times(1)).publish(argumentCaptor.capture());
 
-        EmailMessage emailMessage1 = EmailMessage.fromJSONString(argumentCaptor.getValue().getData().toStringUtf8());
+        EmailMessage emailMessageFromArg = EmailMessage.fromJSONString(argumentCaptor.getValue().getData().toStringUtf8());
 
-        Assert.assertEquals(emailMessage1.getFrom().getAddress(), "systemsender@me.io");
+        Assert.assertEquals(emailMessageFromArg.getFrom().getAddress(), "systemsender@sender.io");
     }
 
     @Test
-    public void EmailMessagePublisherService_ShouldSetFromFieldName() throws Exception {
+    public void EmailMessagePublisherService_ShouldSetFromFieldName_WhenSet() throws Exception {
         Publisher publisher = mock(Publisher.class);
 
         EmailMessagePublisherService emailMessagePublisherService = new EmailMessagePublisherService(publisher,
-                "systemsender@me.io");
+                "systemsender@sender.io");
 
         ApiFuture<String> apiFuture = mock(ApiFuture.class);
         when(apiFuture.get()).thenReturn("message-id-00");
@@ -96,17 +96,17 @@ public class EmailMessagePublisherServiceTest {
         ArgumentCaptor<PubsubMessage> argumentCaptor = ArgumentCaptor.forClass(PubsubMessage.class);
         verify(publisher, times(1)).publish(argumentCaptor.capture());
 
-        EmailMessage emailMessage1 = EmailMessage.fromJSONString(argumentCaptor.getValue().getData().toStringUtf8());
+        EmailMessage emailMessageFromArg = EmailMessage.fromJSONString(argumentCaptor.getValue().getData().toStringUtf8());
 
-        Assert.assertEquals(emailMessage1.getFrom().getName(), emailMessage.getFrom().getName());
+        Assert.assertEquals(emailMessageFromArg.getFrom().getName(), emailMessage.getFrom().getName());
     }
 
     @Test
-    public void EmailMessagePublisherService_ShouldNotSetFromFieldName() throws Exception {
+    public void EmailMessagePublisherService_ShouldNotSetFromFieldName_WhenNotSet() throws Exception {
         Publisher publisher = mock(Publisher.class);
 
         EmailMessagePublisherService emailMessagePublisherService = new EmailMessagePublisherService(publisher,
-                "systemsender@me.io");
+                "systemsender@sender.io");
 
         ApiFuture<String> apiFuture = mock(ApiFuture.class);
         when(apiFuture.get()).thenReturn("message-id-00");
@@ -117,7 +117,7 @@ public class EmailMessagePublisherServiceTest {
                 null,
                 "you@you.com",
                 null,
-                "Your flight to Geneva",
+                "Your flight to Geneva!",
                 "Time for check-in.");
 
         Assert.assertEquals(emailMessagePublisherService.publish(emailMessage), true);
@@ -125,8 +125,8 @@ public class EmailMessagePublisherServiceTest {
         ArgumentCaptor<PubsubMessage> argumentCaptor = ArgumentCaptor.forClass(PubsubMessage.class);
         verify(publisher, times(1)).publish(argumentCaptor.capture());
 
-        EmailMessage emailMessage1 = EmailMessage.fromJSONString(argumentCaptor.getValue().getData().toStringUtf8());
+        EmailMessage emailMessageFromArg = EmailMessage.fromJSONString(argumentCaptor.getValue().getData().toStringUtf8());
 
-        Assert.assertEquals(emailMessage1.getFrom().getName(), "");
+        Assert.assertEquals(emailMessageFromArg.getFrom().getName(), "");
     }
 }

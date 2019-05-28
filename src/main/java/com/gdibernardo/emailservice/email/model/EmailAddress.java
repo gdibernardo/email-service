@@ -17,16 +17,10 @@ public class EmailAddress {
         this.name = name;
     }
 
-    public void setAddress(String address) {
-        this.address = address;
-    }
     public String getAddress() {
         return (address == null) ? new String() : address;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
     public String getName() {
         return (name == null) ? new String() : name;
     }

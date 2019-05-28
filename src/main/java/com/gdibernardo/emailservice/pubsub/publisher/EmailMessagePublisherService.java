@@ -45,10 +45,14 @@ public class EmailMessagePublisherService {
 
 
     private void setSystemSender(EmailMessage clientEmailMessage) {
-        EmailAddress systemSender = new EmailAddress(emailAddressSystemSender);
+        EmailAddress systemSender;
+
         if(clientEmailMessage.getFrom() != null && clientEmailMessage.getFrom().hasName()) {
-            systemSender.setName(clientEmailMessage.getFrom().getName());
+           systemSender = new EmailAddress(emailAddressSystemSender, clientEmailMessage.getFrom().getName());
+        } else {
+            systemSender = new EmailAddress(emailAddressSystemSender);
         }
+
         clientEmailMessage.setFrom(systemSender);
     }
 }

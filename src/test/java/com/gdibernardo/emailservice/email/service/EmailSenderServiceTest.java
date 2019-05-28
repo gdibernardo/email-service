@@ -13,14 +13,14 @@ import static org.mockito.Mockito.*;
 public class EmailSenderServiceTest {
 
     @Test
-    public void Given_EmailSenderServiceWithNoClients_WhenSendEmail_ReturnsFalse() {
+    public void GivenEmailSenderServiceWithNoClients_WhenSendEmail_ThenReturnsFalse() {
         EmailSenderService emailSenderService = new EmailSenderService();
 
         Assert.assertEquals(emailSenderService.send(TestUtils.dummyEmailMessage()), false);
     }
 
     @Test
-    public void Given_EmailSenderServiceWithANotAvailableClient_WhenSendEmail_ReturnsFalse() throws Exception {
+    public void GivenEmailSenderServiceWithANotAvailableClient_WhenSendEmail_ThenReturnsFalse() throws Exception {
         SendGridEmailClient sendGridEmailClient = mock(SendGridEmailClient.class);
 
         doThrow(EmailClientNotAvailableException.class)
@@ -34,7 +34,7 @@ public class EmailSenderServiceTest {
     }
 
     @Test
-    public void Given_EmailSenderServiceWithANotAvailableClientAndAnAvailableClient_WhenSendEmail_ReturnsTrue() throws Exception {
+    public void GivenEmailSenderServiceWithANotAvailableClientAndAnAvailableClient_WhenSendEmail_ThenReturnsTrue() throws Exception {
         SendGridEmailClient sendGridEmailClient = mock(SendGridEmailClient.class);
         doThrow(EmailClientNotAvailableException.class)
                 .when(sendGridEmailClient)
@@ -51,7 +51,7 @@ public class EmailSenderServiceTest {
     }
 
     @Test
-    public void Given_EmailSenderServiceWithTwoNotAvailableClients_WhenSendEmail_ReturnsFalse() throws Exception {
+    public void GivenEmailSenderServiceWithTwoNotAvailableClients_WhenSendEmail_ThenReturnsFalse() throws Exception {
         SendGridEmailClient sendGridEmailClient = mock(SendGridEmailClient.class);
         doThrow(EmailClientNotAvailableException.class)
                 .when(sendGridEmailClient)
@@ -72,7 +72,7 @@ public class EmailSenderServiceTest {
 
 
     @Test
-    public void Given_EmailSenderServiceWithAmAvailableClientAndANotAvailableClient_WhenSendEmail_ReturnsTrue() throws Exception {
+    public void GivenEmailSenderServiceWithAnAvailableClientAndANotAvailableClient_WhenSendEmail_ThenReturnsTrue() throws Exception {
         SendGridEmailClient sendGridEmailClient = mock(SendGridEmailClient.class);
 
         MailjetEmailClient mailjetEmailClient = mock(MailjetEmailClient.class);

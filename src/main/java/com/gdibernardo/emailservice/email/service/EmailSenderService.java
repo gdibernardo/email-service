@@ -1,10 +1,10 @@
 package com.gdibernardo.emailservice.email.service;
 
+import com.gdibernardo.emailservice.email.model.EmailMessage;
 import com.gdibernardo.emailservice.email.service.clients.EmailClient;
 import com.gdibernardo.emailservice.email.service.clients.EmailClientNotAvailableException;
 import com.gdibernardo.emailservice.email.service.clients.MailjetEmailClient;
 import com.gdibernardo.emailservice.email.service.clients.SendGridEmailClient;
-import com.gdibernardo.emailservice.email.model.EmailMessage;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
@@ -35,14 +35,14 @@ public class EmailSenderService {
             log.info(String.format("EmailSenderService: trying sending email from %s.", emailClient.getClass().getSimpleName()));
             try {
                 emailClient.sendEmail(emailMessage);
-                log.info(String.format("Email %s sent correctly.", emailMessage.toString()));
+                log.info(String.format("EmailSenderService: email %s sent correctly.", emailMessage.toString()));
                 return true;
             } catch (EmailClientNotAvailableException exception) {
-                log.warning(String.format("Email client raised an exception %s", exception.getMessage()));
+                log.warning(String.format("EmailSenderService: email client raised an exception %s", exception.getMessage()));
             }
         }
 
-        log.info(String.format("Email %s has not been sent.", emailMessage.toString()));
+        log.info(String.format("EmailSenderService: email %s has not been sent.", emailMessage.toString()));
         return false;
     }
 }

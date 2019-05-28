@@ -1,7 +1,7 @@
 package com.gdibernardo.emailservice.pubsub.subscriber;
 
-import com.gdibernardo.emailservice.email.service.EmailSenderService;
 import com.gdibernardo.emailservice.email.model.EmailMessage;
+import com.gdibernardo.emailservice.email.service.EmailSenderService;
 import com.gdibernardo.emailservice.util.Utils;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
@@ -54,8 +54,7 @@ public class EmailMessagePushReceiver {
             }
 
         } catch (Exception exception) {
-            log.warning("EmailMessagePushReceiver: Cannot parse received message.");
-            log.warning("" + exception.getLocalizedMessage());
+            log.warning(String.format("EmailMessagePushReceiver: Cannot parse received message: %s.", exception.getMessage()));
             response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
         }
     }

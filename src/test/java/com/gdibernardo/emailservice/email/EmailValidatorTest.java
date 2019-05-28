@@ -6,30 +6,35 @@ import org.junit.Test;
 public class EmailValidatorTest {
 
     @Test
-    public void Given_ValidEmail_WhenValidated_IsValid() {
-        /*Given a correct email */
+    public void GivenValidEmail_WhenValidated_ThenIsValid() {
         String email = "correct@correctaddress.com";
 
         Assert.assertEquals(EmailValidator.isValid(email), true);
     }
 
     @Test
-    public void Given_EmptyEmail_WhenValidated_IsInvalid() {
+    public void GivenEmptyEmail_WhenValidated_ThenIsInvalid() {
         String emptyEmail = new String();
+        Assert.assertEquals(EmailValidator.isValid(emptyEmail), false);
 
+
+        emptyEmail =  "    ";
         Assert.assertEquals(EmailValidator.isValid(emptyEmail), false);
     }
 
     @Test
-    public void Given_NullEmail_WhenValidated_IsInvalid() {
+    public void GivenNullEmail_WhenValidated_ThenIsInvalid() {
         String nullEmail = null;
 
         Assert.assertEquals(EmailValidator.isValid(nullEmail), false);
     }
 
     @Test
-    public void Given_InvalidEmails_WhenValidated_AreInvalid() {
+    public void GivenInvalidEmails_WhenValidated_ThenAreInvalid() {
         String invalidEmail =  "I am and invalid email";
+        Assert.assertEquals(EmailValidator.isValid(invalidEmail), false);
+
+        invalidEmail =  "@";
         Assert.assertEquals(EmailValidator.isValid(invalidEmail), false);
 
         invalidEmail =  "invalid@";

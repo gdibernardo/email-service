@@ -2,9 +2,7 @@ package com.gdibernardo.emailservice.email.rest;
 
 import com.gdibernardo.emailservice.email.EmailValidator;
 import com.gdibernardo.emailservice.email.model.EmailMessage;
-import com.gdibernardo.emailservice.email.service.clients.MailjetEmailClient;
 import com.gdibernardo.emailservice.pubsub.publisher.EmailMessagePublisherService;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -26,17 +24,17 @@ public class EmailRestController {
     public ResponseEntity<ResponseMessage> submit(@Valid @RequestBody Email email, Errors errors) {
 
         if(errors.hasErrors()) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ResponseMessage(errors.getAllErrors().get(0).getDefaultMessage(), 400));
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ResponseMessage(errors.getAllErrors().get(0).getDefaultMessage(), HttpStatus.BAD_REQUEST.value()));
         }
 
         if(!EmailValidator.isValid(email.getTo().getAddress())) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ResponseMessage("Email address should be in the correct format.", 400));
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ResponseMessage("Email address should be in the correct format.", HttpStatus.BAD_REQUEST.value()));
         }
 
         if(!emailMessagePublisherService.publish(EmailMessage.fromEmail(email))) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ResponseMessage("Email Service was not able to enqueue your request.", 500));
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ResponseMessage("Email Service was not able to enqueue your request.", HttpStatus.INTERNAL_SERVER_ERROR.value()));
         }
 
-        return ResponseEntity.status(HttpStatus.OK).body(new ResponseMessage("Email enqueued.", 200));
+        return ResponseEntity.status(HttpStatus.OK).body(new ResponseMessage("Email correctly enqueued.", HttpStatus.OK.value()));
     }
 }

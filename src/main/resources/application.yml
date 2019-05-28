@@ -1,8 +1,17 @@
 gcp:
-  project-id: email-service-241013
+  project-id: <<GOOGLE_PROJECT_ID>>
   pub-sub:
-    topic-name: email-messages-queue
-    subscription: email-messages-queue-subscription
+    topic-name: <<PUBSUB_TOPIC_NAME>>
+    subscription: <<PUBSUB_SUBSCRIPTION>>
+    publisher:
+      executor-thread-count: 4
+      retry-settings:
+        retry-delay: 5
+        retry-delay-multiplier: 2.0
+        max-retry-delay: 60
+        total-timeout: 60
+        initial-rpc-timeout: 10
+        max-rpc-timeout: 10
 
 email-system-sender:
   address: <<EMAIL_SYSTEM_SENDER>>

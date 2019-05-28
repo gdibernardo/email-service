@@ -18,8 +18,12 @@ public class EmailMessage {
 
     EmailMessage() {}
 
-    public EmailMessage(String id, EmailAddress from, EmailAddress to, String subject, String content) {
-        this.id = id;
+    public EmailMessage(EmailAddress from,
+                        EmailAddress to,
+                        String subject,
+                        String content) {
+
+        this.id = UUID.randomUUID().toString();
 
         this.from = from;
         this.to = to;
@@ -67,8 +71,7 @@ public class EmailMessage {
     }
 
     public static EmailMessage fromEmail(Email email) {
-        return new EmailMessage(UUID.randomUUID().toString(),
-                email.getFrom(),
+        return new EmailMessage(email.getFrom(),
                 email.getTo(),
                 email.getSubject(),
                 email.getContent());

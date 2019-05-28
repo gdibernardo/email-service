@@ -18,11 +18,31 @@ public class EmailMessagePublisherConfiguration {
     @Value("${gcp.pub-sub.topic-name}")
     private String topicName;
 
+    @Value("${gcp.pub-sub.publisher.executor-thread-count}")
+    private int executorThreadCount;
+
+    @Value("${gcp.pub-sub.publisher.retry-settings.retry-delay}")
+    private long retryDelay;
+
+    @Value("${gcp.pub-sub.publisher.retry-settings.retry-delay-multiplier}")
+    private double retryDelayMultiplier;
+
+    @Value("${gcp.pub-sub.publisher.retry-settings.max-retry-delay}")
+    private long maxRetryDelay;
+
+    @Value("${gcp.pub-sub.publisher.retry-settings.total-timeout}")
+    private long totalTimeout;
+
+    @Value("${gcp.pub-sub.publisher.retry-settings.initial-rpc-timeout}")
+    private long initialRpcTimeout;
+
+    @Value("${gcp.pub-sub.publisher.retry-settings.max-rpc-timeout}")
+    private long maxRpcTimeout;
+
+
     @Bean
     public Publisher emailMessagePublisher() throws Exception {
         ProjectTopicName projectTopicName = ProjectTopicName.of(projectId, topicName);
-
-        int executorThreadCount = 4;
 
         return Publisher.newBuilder(projectTopicName)
                 .setExecutorProvider(InstantiatingExecutorProvider.newBuilder()
@@ -33,22 +53,14 @@ public class EmailMessagePublisherConfiguration {
     }
 
 
-    private static RetrySettings defaultRetrySettings() {
-        Duration retryDelay = Duration.ofMillis(5);
-
-        double retryDelayMultiplier = 2.0;
-        Duration maxRetryDelay = Duration.ofSeconds(60);
-        Duration totalTimeout = Duration.ofSeconds(10);
-        Duration initialRpcTimeout = Duration.ofSeconds(10);
-        Duration maxRpcTimeout = Duration.ofSeconds(10);
-
+    private RetrySettings defaultRetrySettings() {
         return RetrySettings.newBuilder()
-                .setInitialRetryDelay(retryDelay)
+                .setInitialRetryDelay(Duration.ofMillis(retryDelay))
                 .setRetryDelayMultiplier(retryDelayMultiplier)
-                .setMaxRetryDelay(maxRetryDelay)
-                .setTotalTimeout(totalTimeout)
-                .setInitialRpcTimeout(initialRpcTimeout)
-                .setMaxRpcTimeout(maxRpcTimeout)
+                .setMaxRetryDelay(Duration.ofSeconds(maxRetryDelay))
+                .setTotalTimeout(Duration.ofSeconds(totalTimeout))
+                .setInitialRpcTimeout(Duration.ofSeconds(initialRpcTimeout))
+                .setMaxRpcTimeout(Duration.ofSeconds(maxRpcTimeout))
                 .build();
     }
 }
