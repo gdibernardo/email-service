@@ -3,14 +3,14 @@ For the Uber coding challenge (https://github.com/uber-archive/coding-challenge-
 
 The Email Service is powered by the following email providers:
 
-- **Sendgrid**
+- **Sendgrid** (https://www.sendgrid.com)
 
-- **Mailjet**
+- **Mailjet** (https://www.mailjet.com)
 
 
 **Link to the app:** https://email-service-241013.appspot.com
 
-**DO-NOTE:** The submitted email message might end up in your spam folder! 
+**DO NOTE:** The submitted email message might end up in your spam folder! 
 
 
 ## Run locally
@@ -76,6 +76,12 @@ POST /emails/submit
 }
 ```
 
+The `name` field is optional in both the `to` and `from` parameter. The `address` field in `from` object can be omitted. **DO NOTE**: Because Mailjet requires to validate the sender email address, the application will use a system sender email address when sending an email. However, the user can still specify its name.
+
+The `subject` and `content` fields are mandatory for this version of the API.
+
+
+
 #### Example
 
 ```
@@ -88,8 +94,6 @@ curl -i -H "Accept: application/json" -H "Content-Type:application/json" -X POST
 {"message":"Email correctly enqueued.","status":200}
 ```
 
-**DO-NOTE**: Because Mailjet requires to validate the sender email address, the application will use a system sender email address when sending an email. However, the user can still specify its name.
-
 ## TO-DOs:
 - Pub/Sub is an **At-Least-Once delivery** guarantee system: that means that potentially an email message might be sent more than once. Since we do not want that our users have an unpleasant experience, we can deduplicate messages at the application layer. This can be achieved by uniquely identifying each message (the application already assigns a unique id to each email message) and introducing a storage layer. With such an addition, the application can also be enriched with even more functionality to the end user such as an endpoint for querying/polling the current status of a certain email (e.g., enqueued, pending, sent, etc.) or a UI page for displaying the sent emails. 
 - As already mentioned, the UI web frontend should live in a different module and be deployed separately.
@@ -101,6 +105,6 @@ curl -i -H "Accept: application/json" -H "Content-Type:application/json" -X POST
 
 ## About Me
 
-**LinkedIn** https://www.linkedin.com/in/gabrieledibernardo
+**LinkedIn:** https://www.linkedin.com/in/gabrieledibernardo
 
-**Github** https://github.com/gdibernardo
+**Github:** https://github.com/gdibernardo
