@@ -1,4 +1,4 @@
-#Email Service
+# Email Service
 For the Uber coding challenge (https://github.com/uber-archive/coding-challenge-tools/blob/master/coding_challenge.md) I implemented the Email Service app. My solution focuses on the backend. 
 
 The Email Service is powered by the following email providers:
@@ -31,7 +31,8 @@ mvn appengine:run
 ```
 
 
-#Design & Implementation
+# Design & Implementation
+
 I have implemented the Email Service application using Java and the Spring Boot Framework for the backend; the app also has a simple web UI implemented using React.
 
 I have chosen to use Spring Boot because with this framework it is very easy to setup a web-application that can grow very fast in complexity among different contributors.
@@ -43,7 +44,7 @@ The application also relies on Google Pub/Sub message service. I chose to use th
 
 
 
-###Architecture
+### Architecture
 
 From a high-level perspective the application is structured as follow:
 
@@ -59,12 +60,12 @@ This architecture can scale horizontally very well: we might want to scale-out o
 
 The application is able to detect if one of the email providers is not available and failover to the other one.
 
-###REST API
+### REST API
 The application offers just a simple end-point:
 ```
 POST /emails/submit
 ```
-####Data params
+#### Data params
 
 ```
 {
@@ -75,13 +76,13 @@ POST /emails/submit
 }
 ```
 
-####Example
+#### Example
 
 ```
 curl -i -H "Accept: application/json" -H "Content-Type:application/json" -X POST --data '{"to":{"address":"RECIPIENT_EMAIL@ADDRESS.COM"}, "from": {"address": "SENDER_EMAIL@ADDRESS.IO", "name":"SENDER NAME"}, "content":"Scaramouch, Scaramouch will you do the Fandango, Thunderbolt and lightning very very frightening me,\n Gallileo, Gallileo, Gallileo, Gallileo, Gallileo, figaro, magnifico", "subject":"I see a little silhouetto of a man"}' "https://email-service-241013.appspot.com/emails/submit"
 ```
 
-####Response
+#### Response
 
 ```
 {"message":"Email correctly enqueued.","status":200}
@@ -89,7 +90,7 @@ curl -i -H "Accept: application/json" -H "Content-Type:application/json" -X POST
 
 **DO-NOTE**: Because Mailjet requires to validate the sender email address, the application will use a system sender email address when sending an email. However, the user can still specify its name.
 
-##TO-DOs:
+## TO-DOs:
 - Pub/Sub is an **At-Least-Once delivery** guarantee system: that means that potentially an email message might be sent more than once. Since we do not want that our users have an unpleasant experience, we can deduplicate messages at the application layer. This can be achieved by uniquely identifying each message (the application already assigns a unique id to each email message) and introducing a storage layer. With such an addition, the application can also be enriched with even more functionality to the end user such as an endpoint for querying/polling the current status of a certain email (e.g., enqueued, pending, sent, etc.) or a UI page for displaying the sent emails. 
 - As already mentioned, the UI web frontend should live in a different module and be deployed separately.
 - Improve testing; run tests against Pub/Sub emulator; add system tests.
@@ -98,7 +99,7 @@ curl -i -H "Accept: application/json" -H "Content-Type:application/json" -X POST
 - Add support for CC.
 - Improve and test UI.
 
-##About Me
+## About Me
 
 **LinkedIn** https://www.linkedin.com/in/gabrieledibernardo
 
