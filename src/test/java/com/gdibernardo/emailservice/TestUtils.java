@@ -1,7 +1,7 @@
 package com.gdibernardo.emailservice;
 
-import com.gdibernardo.emailservice.email.model.EmailAddress;
-import com.gdibernardo.emailservice.email.model.EmailMessage;
+import com.gdibernardo.emailservice.email.EmailAddress;
+import com.gdibernardo.emailservice.email.EmailMessage;
 
 public final class TestUtils {
     private TestUtils() {}

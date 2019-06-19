@@ -1,7 +1,7 @@
 package com.gdibernardo.emailservice.pubsub;
 
 import com.gdibernardo.emailservice.TestUtils;
-import com.gdibernardo.emailservice.email.model.EmailMessage;
+import com.gdibernardo.emailservice.email.EmailMessage;
 import com.gdibernardo.emailservice.pubsub.publisher.EmailMessagePublisherService;
 import com.google.api.core.ApiFuture;
 import com.google.cloud.pubsub.v1.Publisher;

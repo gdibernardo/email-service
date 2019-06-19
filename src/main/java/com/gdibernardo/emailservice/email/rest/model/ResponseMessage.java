@@ -1,11 +1,11 @@
-package com.gdibernardo.emailservice.email.rest;
+package com.gdibernardo.emailservice.email.rest.model;
 
 public class ResponseMessage {
 
     private String message;
     private int status;
 
-    ResponseMessage(String message, int status) {
+    public ResponseMessage(String message, int status) {
         this.message = message;
         this.status = status;
     }

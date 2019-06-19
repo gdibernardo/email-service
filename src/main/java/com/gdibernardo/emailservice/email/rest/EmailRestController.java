@@ -1,7 +1,9 @@
 package com.gdibernardo.emailservice.email.rest;
 
 import com.gdibernardo.emailservice.email.EmailValidator;
-import com.gdibernardo.emailservice.email.model.EmailMessage;
+import com.gdibernardo.emailservice.email.EmailMessage;
+import com.gdibernardo.emailservice.email.rest.model.Email;
+import com.gdibernardo.emailservice.email.rest.model.ResponseMessage;
 import com.gdibernardo.emailservice.pubsub.publisher.EmailMessagePublisherService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

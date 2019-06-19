@@ -1,4 +1,4 @@
-package com.gdibernardo.emailservice.email.model;
+package com.gdibernardo.emailservice.email;
 
 public class EmailAddress {
 

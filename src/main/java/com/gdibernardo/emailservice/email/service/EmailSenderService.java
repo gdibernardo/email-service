@@ -1,8 +1,8 @@
 package com.gdibernardo.emailservice.email.service;
 
-import com.gdibernardo.emailservice.email.model.EmailMessage;
-import com.gdibernardo.emailservice.email.service.clients.EmailClient;
-import com.gdibernardo.emailservice.email.service.clients.EmailClientNotAvailableException;
+import com.gdibernardo.emailservice.email.EmailMessage;
+import com.gdibernardo.emailservice.email.service.clients.base.EmailClient;
+import com.gdibernardo.emailservice.email.service.clients.base.EmailClientNotAvailableException;
 import com.gdibernardo.emailservice.email.service.clients.MailjetEmailClient;
 import com.gdibernardo.emailservice.email.service.clients.SendGridEmailClient;
 import org.springframework.stereotype.Service;

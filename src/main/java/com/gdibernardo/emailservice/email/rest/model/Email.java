@@ -1,6 +1,6 @@
-package com.gdibernardo.emailservice.email.rest;
+package com.gdibernardo.emailservice.email.rest.model;
 
-import com.gdibernardo.emailservice.email.model.EmailAddress;
+import com.gdibernardo.emailservice.email.EmailAddress;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;

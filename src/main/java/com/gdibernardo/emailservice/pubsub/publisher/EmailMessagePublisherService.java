@@ -1,7 +1,7 @@
 package com.gdibernardo.emailservice.pubsub.publisher;
 
-import com.gdibernardo.emailservice.email.model.EmailAddress;
-import com.gdibernardo.emailservice.email.model.EmailMessage;
+import com.gdibernardo.emailservice.email.EmailAddress;
+import com.gdibernardo.emailservice.email.EmailMessage;
 import com.google.api.core.ApiFuture;
 import com.google.cloud.pubsub.v1.Publisher;
 import com.google.pubsub.v1.PubsubMessage;

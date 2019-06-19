@@ -1,5 +1,6 @@
 package com.gdibernardo.emailservice.email.model;
 
+import com.gdibernardo.emailservice.email.EmailAddress;
 import org.junit.Assert;
 import org.junit.Test;
 

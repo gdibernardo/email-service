@@ -1,6 +1,8 @@
 package com.gdibernardo.emailservice.email.service.clients;
 
-import com.gdibernardo.emailservice.email.model.EmailMessage;
+import com.gdibernardo.emailservice.email.EmailMessage;
+import com.gdibernardo.emailservice.email.service.clients.base.EmailClient;
+import com.gdibernardo.emailservice.email.service.clients.base.EmailClientNotAvailableException;
 import com.sendgrid.*;
 
 import java.io.IOException;
