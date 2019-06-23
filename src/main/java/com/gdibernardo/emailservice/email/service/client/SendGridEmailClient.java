@@ -1,8 +1,8 @@
-package com.gdibernardo.emailservice.email.service.clients;
+package com.gdibernardo.emailservice.email.service.client;
 
 import com.gdibernardo.emailservice.email.EmailMessage;
-import com.gdibernardo.emailservice.email.service.clients.base.EmailClient;
-import com.gdibernardo.emailservice.email.service.clients.base.EmailClientNotAvailableException;
+import com.gdibernardo.emailservice.email.service.client.base.EmailClient;
+import com.gdibernardo.emailservice.email.service.client.base.EmailClientNotAvailableException;
 import com.sendgrid.*;
 
 import java.io.IOException;
@@ -23,7 +23,7 @@ public class SendGridEmailClient implements EmailClient {
         sendGrid = new SendGrid(System.getenv(SENDGRID_API_KEY));
     }
 
-    public void sendEmail(EmailMessage emailMessage) throws EmailClientNotAvailableException {
+    public boolean sendEmail(EmailMessage emailMessage) {
         log.info(String.format("Sending email %s from SendGrid email client.", emailMessage.toString()));
 
         Email to = new Email(emailMessage.getTo().getAddress());
@@ -49,6 +49,8 @@ public class SendGridEmailClient implements EmailClient {
         } catch (IOException exception) {
             throw new EmailClientNotAvailableException(String.format("SendGridEmailClient raised an exception: %s", exception.getMessage()));
         }
+
+        return true;
     }
 }
 

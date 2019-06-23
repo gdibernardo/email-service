@@ -2,9 +2,9 @@ package com.gdibernardo.emailservice.email.service;
 
 import com.gdibernardo.emailservice.TestUtils;
 import com.gdibernardo.emailservice.email.EmailMessage;
-import com.gdibernardo.emailservice.email.service.clients.base.EmailClientNotAvailableException;
-import com.gdibernardo.emailservice.email.service.clients.MailjetEmailClient;
-import com.gdibernardo.emailservice.email.service.clients.SendGridEmailClient;
+import com.gdibernardo.emailservice.email.service.client.base.EmailClientNotAvailableException;
+import com.gdibernardo.emailservice.email.service.client.MailjetEmailClient;
+import com.gdibernardo.emailservice.email.service.client.SendGridEmailClient;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -14,27 +14,27 @@ public class EmailSenderServiceTest {
 
     @Test
     public void GivenEmailSenderServiceWithNoClients_WhenSendEmail_ThenReturnsFalse() {
-        EmailSenderService emailSenderService = new EmailSenderService();
+        EmailSenderService emailSenderService = new EmailSenderService(TestUtils.defaultCircuitBreakerRegistry(), TestUtils.defaultRetryRegistry());
 
         Assert.assertEquals(emailSenderService.send(TestUtils.dummyEmailMessage()), false);
     }
 
     @Test
-    public void GivenEmailSenderServiceWithANotAvailableClient_WhenSendEmail_ThenReturnsFalse() throws Exception {
+    public void GivenEmailSenderServiceWithANotAvailableClient_WhenSendEmail_ThenReturnsFalse() {
         SendGridEmailClient sendGridEmailClient = mock(SendGridEmailClient.class);
 
         doThrow(EmailClientNotAvailableException.class)
                 .when(sendGridEmailClient)
                 .sendEmail(any(EmailMessage.class));
 
-        EmailSenderService emailSenderService = new EmailSenderService();
+        EmailSenderService emailSenderService = new EmailSenderService(TestUtils.defaultCircuitBreakerRegistry(), TestUtils.defaultRetryRegistry());
         emailSenderService.addEmailClient(sendGridEmailClient);
 
         Assert.assertEquals(emailSenderService.send(TestUtils.dummyEmailMessage()), false);
     }
 
     @Test
-    public void GivenEmailSenderServiceWithANotAvailableClientAndAnAvailableClient_WhenSendEmail_ThenReturnsTrue() throws Exception {
+    public void GivenEmailSenderServiceWithANotAvailableClientAndAnAvailableClient_WhenSendEmail_ThenReturnsTrue() {
         SendGridEmailClient sendGridEmailClient = mock(SendGridEmailClient.class);
         doThrow(EmailClientNotAvailableException.class)
                 .when(sendGridEmailClient)
@@ -42,7 +42,11 @@ public class EmailSenderServiceTest {
 
         MailjetEmailClient mailjetEmailClient = mock(MailjetEmailClient.class);
 
-        EmailSenderService emailSenderService = new EmailSenderService();
+        doReturn(true)
+                .when(mailjetEmailClient)
+                .sendEmail(any(EmailMessage.class));
+
+        EmailSenderService emailSenderService = new EmailSenderService(TestUtils.defaultCircuitBreakerRegistry(), TestUtils.defaultRetryRegistry());
 
         emailSenderService.addEmailClient(sendGridEmailClient);
         emailSenderService.addEmailClient(mailjetEmailClient);
@@ -51,7 +55,7 @@ public class EmailSenderServiceTest {
     }
 
     @Test
-    public void GivenEmailSenderServiceWithTwoNotAvailableClients_WhenSendEmail_ThenReturnsFalse() throws Exception {
+    public void GivenEmailSenderServiceWithTwoNotAvailableClients_WhenSendEmail_ThenReturnsFalse() {
         SendGridEmailClient sendGridEmailClient = mock(SendGridEmailClient.class);
         doThrow(EmailClientNotAvailableException.class)
                 .when(sendGridEmailClient)
@@ -62,7 +66,7 @@ public class EmailSenderServiceTest {
                 .when(mailjetEmailClient)
                 .sendEmail(any(EmailMessage.class));
 
-        EmailSenderService emailSenderService = new EmailSenderService();
+        EmailSenderService emailSenderService = new EmailSenderService(TestUtils.defaultCircuitBreakerRegistry(), TestUtils.defaultRetryRegistry());
 
         emailSenderService.addEmailClient(sendGridEmailClient);
         emailSenderService.addEmailClient(mailjetEmailClient);
@@ -72,15 +76,19 @@ public class EmailSenderServiceTest {
 
 
     @Test
-    public void GivenEmailSenderServiceWithAnAvailableClientAndANotAvailableClient_WhenSendEmail_ThenReturnsTrue() throws Exception {
+    public void GivenEmailSenderServiceWithAnAvailableClientAndANotAvailableClient_WhenSendEmail_ThenReturnsTrue() {
         SendGridEmailClient sendGridEmailClient = mock(SendGridEmailClient.class);
+
+        doReturn(true)
+                .when(sendGridEmailClient)
+                .sendEmail(any(EmailMessage.class));
 
         MailjetEmailClient mailjetEmailClient = mock(MailjetEmailClient.class);
         doThrow(EmailClientNotAvailableException.class)
                 .when(mailjetEmailClient)
                 .sendEmail(any(EmailMessage.class));
 
-        EmailSenderService emailSenderService = new EmailSenderService();
+        EmailSenderService emailSenderService = new EmailSenderService(TestUtils.defaultCircuitBreakerRegistry(), TestUtils.defaultRetryRegistry());
 
         emailSenderService.addEmailClient(sendGridEmailClient);
         emailSenderService.addEmailClient(mailjetEmailClient);

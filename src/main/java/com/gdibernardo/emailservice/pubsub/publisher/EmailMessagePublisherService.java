@@ -36,7 +36,6 @@ public class EmailMessagePublisherService {
 
             log.info(String.format("EmailMessagePublisherService: published message %s with id %s to Pub/Sub.", message.toString(), messageId));
             return true;
-
         } catch (Exception exception) {
             log.warning(String.format("EmailMessagePublisherService: Failed while trying to publish a message. Exception: %s", exception.getMessage()));
             return false;

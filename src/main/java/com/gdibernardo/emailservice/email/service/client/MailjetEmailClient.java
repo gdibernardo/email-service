@@ -1,8 +1,8 @@
-package com.gdibernardo.emailservice.email.service.clients;
+package com.gdibernardo.emailservice.email.service.client;
 
 import com.gdibernardo.emailservice.email.EmailMessage;
-import com.gdibernardo.emailservice.email.service.clients.base.EmailClient;
-import com.gdibernardo.emailservice.email.service.clients.base.EmailClientNotAvailableException;
+import com.gdibernardo.emailservice.email.service.client.base.EmailClient;
+import com.gdibernardo.emailservice.email.service.client.base.EmailClientNotAvailableException;
 import com.mailjet.client.MailjetClient;
 import com.mailjet.client.MailjetRequest;
 import com.mailjet.client.MailjetResponse;
@@ -23,7 +23,7 @@ public class MailjetEmailClient implements EmailClient {
         mailjetClient = new MailjetClient(System.getenv(MAILJET_API_KEY), System.getenv(MAILJET_SECRET_KEY));
     }
 
-    public void sendEmail(EmailMessage emailMessage) throws EmailClientNotAvailableException {
+    public boolean sendEmail(EmailMessage emailMessage) {
         log.info(String.format("Sending email %s from Mailjet email client.", emailMessage.toString()));
 
         MailjetRequest request = new MailjetRequest(Email.resource)
@@ -40,5 +40,7 @@ public class MailjetEmailClient implements EmailClient {
         } catch (Exception exception) {
             throw new EmailClientNotAvailableException(String.format("MailjetEmailClient raised an exception: %s", exception.getMessage()));
         }
+
+        return true;
     }
 }

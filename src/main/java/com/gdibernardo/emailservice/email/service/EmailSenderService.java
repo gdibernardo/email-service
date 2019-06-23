@@ -1,15 +1,20 @@
 package com.gdibernardo.emailservice.email.service;
 
 import com.gdibernardo.emailservice.email.EmailMessage;
-import com.gdibernardo.emailservice.email.service.clients.base.EmailClient;
-import com.gdibernardo.emailservice.email.service.clients.base.EmailClientNotAvailableException;
-import com.gdibernardo.emailservice.email.service.clients.MailjetEmailClient;
-import com.gdibernardo.emailservice.email.service.clients.SendGridEmailClient;
+import com.gdibernardo.emailservice.email.service.client.base.EmailClient;
+import com.gdibernardo.emailservice.email.service.client.MailjetEmailClient;
+import com.gdibernardo.emailservice.email.service.client.SendGridEmailClient;
+import io.github.resilience4j.circuitbreaker.CircuitBreaker;
+import io.github.resilience4j.circuitbreaker.CircuitBreakerRegistry;
+import io.github.resilience4j.retry.Retry;
+import io.github.resilience4j.retry.RetryRegistry;
+import io.vavr.control.Try;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.function.Supplier;
 import java.util.logging.Logger;
 
 @Service
@@ -19,10 +24,13 @@ public class EmailSenderService {
 
     private List<EmailClient> emailClients = new LinkedList<>();
 
-    @PostConstruct
-    private void initEmailClients() {
-        emailClients.add(new SendGridEmailClient());
-        emailClients.add(new MailjetEmailClient());
+    private CircuitBreakerRegistry circuitBreakerRegistry;
+
+    private RetryRegistry retryRegistry;
+
+    public EmailSenderService(CircuitBreakerRegistry circuitBreakerRegistry, RetryRegistry retryRegistry) {
+        this.circuitBreakerRegistry = circuitBreakerRegistry;
+        this.retryRegistry = retryRegistry;
     }
 
     public void addEmailClient(EmailClient emailClient) {
@@ -32,17 +40,35 @@ public class EmailSenderService {
     public boolean send(EmailMessage emailMessage) {
 
         for(EmailClient emailClient : emailClients) {
-            log.info(String.format("EmailSenderService: trying sending email from %s.", emailClient.getClass().getSimpleName()));
-            try {
-                emailClient.sendEmail(emailMessage);
+
+            String emailClientIdentifier = emailClient.getClass().getSimpleName();
+            log.info(String.format("EmailSenderService: trying sending email from %s.", emailClientIdentifier));
+
+            CircuitBreaker circuitBreaker = circuitBreakerRegistry.circuitBreaker(emailClientIdentifier);
+            Retry retry = retryRegistry.retry(emailClientIdentifier);
+
+            Supplier<Boolean> decoratedSupplier = CircuitBreaker.decorateSupplier(circuitBreaker,
+                    () -> emailClient.sendEmail(emailMessage));
+
+            decoratedSupplier = Retry.decorateSupplier(retry, decoratedSupplier);
+
+            Boolean emailClientResponse =  Try.ofSupplier(decoratedSupplier)
+                    .recover(throwable -> false)
+                    .get();
+
+            if(emailClientResponse == true) {
                 log.info(String.format("EmailSenderService: email %s sent correctly.", emailMessage.toString()));
                 return true;
-            } catch (EmailClientNotAvailableException exception) {
-                log.warning(String.format("EmailSenderService: email client raised an exception %s", exception.getMessage()));
             }
         }
 
         log.info(String.format("EmailSenderService: email %s has not been sent.", emailMessage.toString()));
         return false;
+    }
+
+    @PostConstruct
+    private void initEmailClients() {
+        emailClients.add(new SendGridEmailClient());
+        emailClients.add(new MailjetEmailClient());
     }
 }

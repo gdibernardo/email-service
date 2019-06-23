@@ -15,3 +15,13 @@ gcp:
 
 email-system-sender:
   address: <<EMAIL_SYSTEM_SENDER>>
+
+resilience4j:
+  circuit-breaker:
+    failure-rate-threshold: 50
+    duration-in-open-state-ms: 2000
+    ring-buffer-size-half-open-state: 10
+    ring-buffer-size-closed-state: 100
+  retry:
+    max-attempts: 2
+    wait-duration-ms: 500

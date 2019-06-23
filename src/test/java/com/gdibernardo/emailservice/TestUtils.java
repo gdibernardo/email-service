@@ -2,6 +2,13 @@ package com.gdibernardo.emailservice;
 
 import com.gdibernardo.emailservice.email.EmailAddress;
 import com.gdibernardo.emailservice.email.EmailMessage;
+import com.gdibernardo.emailservice.email.service.client.base.EmailClientNotAvailableException;
+import io.github.resilience4j.circuitbreaker.CircuitBreakerConfig;
+import io.github.resilience4j.circuitbreaker.CircuitBreakerRegistry;
+import io.github.resilience4j.retry.RetryConfig;
+import io.github.resilience4j.retry.RetryRegistry;
+
+import java.time.Duration;
 
 public final class TestUtils {
     private TestUtils() {}
@@ -25,5 +32,24 @@ public final class TestUtils {
                 subject,
                 content);
 
+    }
+
+    public static CircuitBreakerRegistry defaultCircuitBreakerRegistry() {
+        return CircuitBreakerRegistry.of(
+                CircuitBreakerConfig.custom()
+                        .failureRateThreshold(50)
+                        .waitDurationInOpenState(Duration.ofMillis(2000))
+                        .ringBufferSizeInHalfOpenState(10)
+                        .ringBufferSizeInClosedState(10)
+                        .build());
+    }
+
+    public static RetryRegistry defaultRetryRegistry() {
+        return RetryRegistry.of(
+                RetryConfig.custom()
+                        .maxAttempts(2)
+                        .waitDuration(Duration.ofMillis(500))
+                        .retryExceptions(EmailClientNotAvailableException.class)
+                        .build());
     }
 }

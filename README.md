@@ -96,6 +96,8 @@ curl -i -H "Accept: application/json" -H "Content-Type:application/json" -X POST
 ## TO-DOs:
 - Pub/Sub is an **At-Least-Once delivery** guarantee system: that means that potentially an email message might be sent more than once. Since we do not want that our users have an unpleasant experience, we can deduplicate messages at the application layer. This can be achieved by uniquely identifying each message (the application already assigns a unique id to each email message) and introducing a storage layer. With such an addition, the application can also be enriched with even more functionality to the end user such as an endpoint for querying/polling the current status of a certain email (e.g., enqueued, pending, sent, etc.) or a UI page for displaying the sent emails. 
 - As already mentioned, the UI web frontend should live in a different module and be deployed separately.
+- Discriminate exceptions/results raised/returned by email providers and act accordingly (e.g., exceptions caused by invalid mails vs HTTP 5xx from the emails providers, etc.); forward invalid emails to a DLQ topic.
+- Create a scheduled (with a fixed rate) background task that checks the /status endpoint of each email providers. If one of the email providers is detected to be down, the associated circuit breaker state can be changed or the client can be temporary removed from the list of the available providers.
 - Improve testing; run tests against Pub/Sub emulator; add system tests; thoroughly test the endpoint(s).
 - Add support for HTML content and email attachments. 
 - Add support for multiple recipients.
