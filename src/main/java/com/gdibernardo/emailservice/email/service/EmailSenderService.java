@@ -1,6 +1,6 @@
 package com.gdibernardo.emailservice.email.service;
 
-import com.gdibernardo.emailservice.email.EmailMessage;
+import com.gdibernardo.emailservice.email.Email;
 import com.gdibernardo.emailservice.email.service.client.base.EmailClient;
 import com.gdibernardo.emailservice.email.service.client.MailjetEmailClient;
 import com.gdibernardo.emailservice.email.service.client.SendGridEmailClient;
@@ -28,7 +28,8 @@ public class EmailSenderService {
 
     private RetryRegistry retryRegistry;
 
-    public EmailSenderService(CircuitBreakerRegistry circuitBreakerRegistry, RetryRegistry retryRegistry) {
+    public EmailSenderService(CircuitBreakerRegistry circuitBreakerRegistry,
+                              RetryRegistry retryRegistry) {
         this.circuitBreakerRegistry = circuitBreakerRegistry;
         this.retryRegistry = retryRegistry;
     }
@@ -37,7 +38,7 @@ public class EmailSenderService {
         emailClients.add(emailClient);
     }
 
-    public boolean send(EmailMessage emailMessage) {
+    public boolean send(Email email) {
 
         for(EmailClient emailClient : emailClients) {
 
@@ -48,21 +49,21 @@ public class EmailSenderService {
             Retry retry = retryRegistry.retry(emailClientIdentifier);
 
             Supplier<Boolean> decoratedSupplier = CircuitBreaker.decorateSupplier(circuitBreaker,
-                    () -> emailClient.sendEmail(emailMessage));
+                    () -> emailClient.sendEmail(email));
 
             decoratedSupplier = Retry.decorateSupplier(retry, decoratedSupplier);
 
-            Boolean emailClientResponse =  Try.ofSupplier(decoratedSupplier)
+            Boolean emailClientResponse = Try.ofSupplier(decoratedSupplier)
                     .recover(throwable -> false)
                     .get();
 
             if(emailClientResponse == true) {
-                log.info(String.format("EmailSenderService: email %s sent correctly.", emailMessage.toString()));
+                log.info(String.format("EmailSenderService: email %s sent correctly.", email.toString()));
                 return true;
             }
         }
 
-        log.info(String.format("EmailSenderService: email %s has not been sent.", emailMessage.toString()));
+        log.info(String.format("EmailSenderService: email %s has not been sent.", email.toString()));
         return false;
     }
 

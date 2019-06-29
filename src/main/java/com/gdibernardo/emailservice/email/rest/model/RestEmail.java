@@ -5,7 +5,7 @@ import com.gdibernardo.emailservice.email.EmailAddress;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
-public class Email {
+public class RestEmail {
 
     @NotNull(message = "To email address is a mandatory field.")
     private EmailAddress to;

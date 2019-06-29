@@ -59,12 +59,16 @@ For sake of simplicity, the application comes as a single deployable unit (and c
 
 This architecture can scale horizontally very well: we might want to scale-out one or more of the listed components, for example, in order to handle a massive load of requests.
 
-### REST API
-The application offers just a simple endpoint:
+## REST API
+The application offers two simple endpoint:
+- POST /emails/submit for sending a new email
+- GET /emails/status/{emailId} to check the status of a specific email
+### Send an email
+
 ```
 POST /emails/submit
 ```
-#### Data params
+##### Data params
 
 ```
 {
@@ -79,24 +83,38 @@ The `name` field is optional in both the `to` (can be omitted) and `from` parame
 
 The `subject` and `content` fields are mandatory for this version of the API.
 
-
-
-#### Example
+##### Example
 
 ```
 curl -i -H "Accept: application/json" -H "Content-Type:application/json" -X POST --data '{"to":{"address":"RECIPIENT_EMAIL@ADDRESS.COM"}, "from": {"address": "SENDER_EMAIL@ADDRESS.IO", "name":"SENDER NAME"}, "content":"Scaramouch, Scaramouch will you do the Fandango, Thunderbolt and lightning very very frightening me,\n Gallileo, Gallileo, Gallileo, Gallileo, Gallileo, figaro, magnifico", "subject":"I see a little silhouetto of a man"}' "https://email-service-241013.appspot.com/emails/submit"
 ```
 
-#### Response
+##### Response
 
 ```
-{"message":"Email correctly enqueued.","status":200}
+{"message":"Email correctly enqueued.","httpStatusCode":200, "emailId": 82821929}
 ```
+The returned emailId value is a Long.
+### Get status of an email
+```
+POST /emails/status/{emailId}
+```
+**emailId** should be a **Long** numeric type.
 
+##### Example
+```
+curl -i -H "Accept: application/json" -H "Content-Type:application/json" -X GET https://email-service-241013.appspot.com/emails/status/564440656039116
+
+```
+##### Response
+```
+{"message":"Email status correctly fetched from Email Service.","httpStatusCode":200, "emailId":564440656039116, emailStatus":"SENT","lastUpdate":"2019-06-29T20:09:07.208+0000"}
+```
 ## TO-DOs:
-- Pub/Sub is an **At-Least-Once delivery** guarantee system: that means that potentially an email message might be sent more than once. Since we do not want that our users have an unpleasant experience, we can deduplicate messages at the application layer. This can be achieved by uniquely identifying each message (the application already assigns a unique id to each email message) and introducing a storage layer. With such an addition, the application can also be enriched with even more functionality to the end user such as an endpoint for querying/polling the current status of a certain email (e.g., enqueued, pending, sent, etc.) or a UI page for displaying the sent emails. 
+- ~~Pub/Sub is an **At-Least-Once delivery** guarantee system: that means that potentially an email message might be sent more than once. Since we do not want that our users have an unpleasant experience, we can deduplicate messages at the application layer. This can be achieved by uniquely identifying each message (the application already assigns a unique id to each email message) and introducing a storage layer. With such an addition, the application can also be enriched with even more functionality to the end user such as an endpoint for querying/polling the current status of a certain email (e.g., enqueued, pending, sent, etc.) or a UI page for displaying the sent emails.~~ 
 - As already mentioned, the UI web frontend should live in a different module and be deployed separately.
 - Discriminate exceptions/results raised/returned by email providers and act accordingly (e.g., exceptions caused by invalid mails vs HTTP 5xx from the emails providers, etc.); forward invalid emails to a DLQ topic.
+- Add an authentication layer that allows only authorized users to send emails. With such an addition, emails might be sent using the user's email address.
 - Create a scheduled (with a fixed rate) background task that checks the /status endpoint of each email providers. If one of the email providers is detected to be down, the associated circuit breaker state can be changed or the client can be temporary removed from the list of the available providers.
 - Improve testing; run tests against Pub/Sub emulator; add system tests; thoroughly test the endpoint(s).
 - Add support for HTML content and email attachments. 

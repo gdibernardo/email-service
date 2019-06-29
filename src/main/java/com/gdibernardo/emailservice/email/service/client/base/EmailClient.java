@@ -1,7 +1,7 @@
 package com.gdibernardo.emailservice.email.service.client.base;
 
-import com.gdibernardo.emailservice.email.EmailMessage;
+import com.gdibernardo.emailservice.email.Email;
 
 public interface EmailClient {
-    boolean sendEmail(EmailMessage emailMessage);
+    boolean sendEmail(Email email);
 }

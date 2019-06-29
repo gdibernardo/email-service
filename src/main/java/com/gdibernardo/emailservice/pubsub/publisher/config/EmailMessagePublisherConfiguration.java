@@ -52,7 +52,6 @@ public class EmailMessagePublisherConfiguration {
                 .build();
     }
 
-
     private RetrySettings defaultRetrySettings() {
         return RetrySettings.newBuilder()
                 .setInitialRetryDelay(Duration.ofMillis(retryDelay))
@@ -64,3 +63,4 @@ public class EmailMessagePublisherConfiguration {
                 .build();
     }
 }
+

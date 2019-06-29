@@ -56,8 +56,13 @@ class App extends React.Component {
           data: this.state
         })
           .then(result => {
-            window.alert(result.data.message);
-            console.log("Result:" + result.data.message);
+          var response = result.data.message;
+          if(result.data.emailId != null) {
+            response = response + "\nEmail id: " + result.data.emailId;
+           }
+           window.alert(response);
+
+           console.log("Result:" + response);
           })
           .catch(error => {
             window.alert("Something very bad and sad happened: " + error.message);

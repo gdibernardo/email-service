@@ -1,7 +1,8 @@
 package com.gdibernardo.emailservice;
 
+import com.gdibernardo.emailservice.email.Email;
 import com.gdibernardo.emailservice.email.EmailAddress;
-import com.gdibernardo.emailservice.email.EmailMessage;
+import com.gdibernardo.emailservice.email.EmailStatus;
 import com.gdibernardo.emailservice.email.service.client.base.EmailClientNotAvailableException;
 import io.github.resilience4j.circuitbreaker.CircuitBreakerConfig;
 import io.github.resilience4j.circuitbreaker.CircuitBreakerRegistry;
@@ -13,24 +14,32 @@ import java.time.Duration;
 public final class TestUtils {
     private TestUtils() {}
 
-    public static EmailMessage dummyEmailMessage() {
+    public static Email dummyEmailMessage() {
         EmailAddress from = new EmailAddress("mary@provider.com", "Mary");
         EmailAddress to = new EmailAddress("jack@provider.com", "Jack");
 
-        return new EmailMessage(from, to, "It's not you, it is me.", "It does not work anymore.");
+        return new Email(23,
+                from,
+                to,
+                "It's not you, it is me.",
+                "It does not work anymore.",
+                EmailStatus.ENQUEUED);
     }
 
-    public static EmailMessage emailMessage(String fromAddress,
-                                            String fromName,
-                                            String toAddress,
-                                            String toName,
-                                            String subject,
-                                            String content) {
+    public static Email email(long id,
+                              String fromAddress,
+                              String fromName,
+                              String toAddress,
+                              String toName,
+                              String subject,
+                              String content) {
 
-        return new EmailMessage(new EmailAddress(fromAddress, fromName),
+        return new Email(id,
+                new EmailAddress(fromAddress, fromName),
                 new EmailAddress(toAddress, toName),
                 subject,
-                content);
+                content,
+                EmailStatus.ENQUEUED);
 
     }
 

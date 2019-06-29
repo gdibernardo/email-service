@@ -23,6 +23,8 @@
 		<maven.compiler.source>${java.version}</maven.compiler.source>
 		<maven.compiler.target>${java.version}</maven.compiler.target>
 		<google.pubsub.version>1.62.0</google.pubsub.version>
+		<google.appengine.version>1.9.76</google.appengine.version>
+		<google.appengine.api.client.version>1.30.1</google.appengine.api.client.version>
 		<sendgrid.version>4.3.0</sendgrid.version>
 		<mailjet.version>4.2.1</mailjet.version>
 		<resilience4j.version>0.16.0</resilience4j.version>
@@ -71,6 +73,39 @@
 			<version>${google.pubsub.version}</version>
 		</dependency>
 
+		<!--	App Engine API	-->
+		<dependency>
+			<groupId>com.google.appengine</groupId>
+			<artifactId>appengine-api-1.0-sdk</artifactId>
+			<version>${google.appengine.version}</version>
+		</dependency>
+
+		<!--	App Engine testing	-->
+		<dependency>
+			<groupId>com.google.appengine</groupId>
+			<artifactId>appengine-testing</artifactId>
+			<version>${google.appengine.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.google.appengine</groupId>
+			<artifactId>appengine-api-stubs</artifactId>
+			<version>${google.appengine.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.google.appengine</groupId>
+			<artifactId>appengine-tools-sdk</artifactId>
+			<version>${google.appengine.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.google.api-client</groupId>
+			<artifactId>google-api-client-appengine</artifactId>
+			<version>${google.appengine.api.client.version}</version>
+			<scope>test</scope>
+		</dependency>
+
 		<!--	SendGrid	-->
 		<dependency>
 			<groupId>com.sendgrid</groupId>
@@ -105,7 +140,6 @@
 		</dependency>
 	</dependencies>
 
-
 	<dependencyManagement>
 		<dependencies>
 			<dependency>
@@ -118,7 +152,6 @@
 			</dependency>
 		</dependencies>
 	</dependencyManagement>
-
 
 	<build>
 		<plugins>

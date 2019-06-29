@@ -1,7 +1,7 @@
 package com.gdibernardo.emailservice.email.service;
 
 import com.gdibernardo.emailservice.TestUtils;
-import com.gdibernardo.emailservice.email.EmailMessage;
+import com.gdibernardo.emailservice.email.Email;
 import com.gdibernardo.emailservice.email.service.client.base.EmailClientNotAvailableException;
 import com.gdibernardo.emailservice.email.service.client.MailjetEmailClient;
 import com.gdibernardo.emailservice.email.service.client.SendGridEmailClient;
@@ -25,7 +25,7 @@ public class EmailSenderServiceTest {
 
         doThrow(EmailClientNotAvailableException.class)
                 .when(sendGridEmailClient)
-                .sendEmail(any(EmailMessage.class));
+                .sendEmail(any(Email.class));
 
         EmailSenderService emailSenderService = new EmailSenderService(TestUtils.defaultCircuitBreakerRegistry(), TestUtils.defaultRetryRegistry());
         emailSenderService.addEmailClient(sendGridEmailClient);
@@ -38,13 +38,13 @@ public class EmailSenderServiceTest {
         SendGridEmailClient sendGridEmailClient = mock(SendGridEmailClient.class);
         doThrow(EmailClientNotAvailableException.class)
                 .when(sendGridEmailClient)
-                .sendEmail(any(EmailMessage.class));
+                .sendEmail(any(Email.class));
 
         MailjetEmailClient mailjetEmailClient = mock(MailjetEmailClient.class);
 
         doReturn(true)
                 .when(mailjetEmailClient)
-                .sendEmail(any(EmailMessage.class));
+                .sendEmail(any(Email.class));
 
         EmailSenderService emailSenderService = new EmailSenderService(TestUtils.defaultCircuitBreakerRegistry(), TestUtils.defaultRetryRegistry());
 
@@ -59,12 +59,12 @@ public class EmailSenderServiceTest {
         SendGridEmailClient sendGridEmailClient = mock(SendGridEmailClient.class);
         doThrow(EmailClientNotAvailableException.class)
                 .when(sendGridEmailClient)
-                .sendEmail(any(EmailMessage.class));
+                .sendEmail(any(Email.class));
 
         MailjetEmailClient mailjetEmailClient = mock(MailjetEmailClient.class);
         doThrow(EmailClientNotAvailableException.class)
                 .when(mailjetEmailClient)
-                .sendEmail(any(EmailMessage.class));
+                .sendEmail(any(Email.class));
 
         EmailSenderService emailSenderService = new EmailSenderService(TestUtils.defaultCircuitBreakerRegistry(), TestUtils.defaultRetryRegistry());
 
@@ -81,12 +81,12 @@ public class EmailSenderServiceTest {
 
         doReturn(true)
                 .when(sendGridEmailClient)
-                .sendEmail(any(EmailMessage.class));
+                .sendEmail(any(Email.class));
 
         MailjetEmailClient mailjetEmailClient = mock(MailjetEmailClient.class);
         doThrow(EmailClientNotAvailableException.class)
                 .when(mailjetEmailClient)
-                .sendEmail(any(EmailMessage.class));
+                .sendEmail(any(Email.class));
 
         EmailSenderService emailSenderService = new EmailSenderService(TestUtils.defaultCircuitBreakerRegistry(), TestUtils.defaultRetryRegistry());
 

@@ -1,6 +1,6 @@
 package com.gdibernardo.emailservice.email.service.client;
 
-import com.gdibernardo.emailservice.email.EmailMessage;
+import com.gdibernardo.emailservice.email.Email;
 import com.gdibernardo.emailservice.email.service.client.base.EmailClient;
 import com.gdibernardo.emailservice.email.service.client.base.EmailClientNotAvailableException;
 import com.sendgrid.*;
@@ -23,15 +23,15 @@ public class SendGridEmailClient implements EmailClient {
         sendGrid = new SendGrid(System.getenv(SENDGRID_API_KEY));
     }
 
-    public boolean sendEmail(EmailMessage emailMessage) {
-        log.info(String.format("Sending email %s from SendGrid email client.", emailMessage.toString()));
+    public boolean sendEmail(Email email) {
+        log.info(String.format("Sending email %s from SendGrid email client.", email.toString()));
 
-        Email to = new Email(emailMessage.getTo().getAddress());
-        Email from = new Email(emailMessage.getFrom().getAddress(), emailMessage.getFrom().getName());
+        com.sendgrid.Email to = new com.sendgrid.Email(email.getTo().getAddress());
+        com.sendgrid.Email from = new com.sendgrid.Email(email.getFrom().getAddress(), email.getFrom().getName());
 
         //  Our service will support only text/plain content for now.
-        Content content = new Content(SENDGRID_MAIL_CONTENT_TYPE, emailMessage.getContent());
-        Mail mail = new Mail(from, emailMessage.getSubject(), to, content);
+        Content content = new Content(SENDGRID_MAIL_CONTENT_TYPE, email.getContent());
+        Mail mail = new Mail(from, email.getSubject(), to, content);
 
         Request request = new Request();
         try {

@@ -1,8 +1,13 @@
 package com.gdibernardo.emailservice.pubsub.subscriber;
 
-import com.gdibernardo.emailservice.email.EmailMessage;
+import com.gdibernardo.emailservice.email.Email;
+import com.gdibernardo.emailservice.email.EmailStatus;
+import com.gdibernardo.emailservice.email.service.DatastoreEmailService;
 import com.gdibernardo.emailservice.email.service.EmailSenderService;
+import com.gdibernardo.emailservice.pubsub.EmailMessage;
 import com.gdibernardo.emailservice.util.Utils;
+import com.google.appengine.api.datastore.DatastoreFailureException;
+import com.google.appengine.api.datastore.EntityNotFoundException;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +30,9 @@ public class EmailMessagePushReceiver {
 
     @Autowired
     private EmailSenderService emailSenderService;
+
+    @Autowired
+    private DatastoreEmailService datastoreEmailService;
 
     private String pubSubVerificationToken;
 
@@ -49,11 +57,32 @@ public class EmailMessagePushReceiver {
             EmailMessage receivedMessage = EmailMessage.fromJSONString(Utils.decodeBase64(messageData));
             log.info(String.format("EmailMessagePushReceiver: Received message %s", receivedMessage.toString()));
 
-            if(!emailSenderService.send(receivedMessage)) {
+            Email email = datastoreEmailService.fetchEmail(receivedMessage.getId());
+
+            if(email.getStatus() == EmailStatus.SENT) {
+                return;
+            }
+
+            if(emailSenderService.send(email)) {
+                email.setStatus(EmailStatus.SENT);
+            } else {
+                email.setStatus(EmailStatus.PENDING);
                 response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
             }
 
-        } catch (Exception exception) {
+            if(datastoreEmailService.persistEmail(email) == 0) {
+                response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            }
+        }
+        catch (EntityNotFoundException exception) {
+            log.warning(String.format("EmailMessagePushReceiver: Cannot fetch email: %s.", exception.getMessage()));
+            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+        }
+        catch (DatastoreFailureException exception) {
+            log.warning(String.format("EmailMessagePushReceiver: Datastore failure %s.", exception.getMessage()));
+            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+        }
+        catch (Exception exception) {
             log.warning(String.format("EmailMessagePushReceiver: Cannot parse received message: %s.", exception.getMessage()));
             response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
         }
