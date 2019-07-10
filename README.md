@@ -51,10 +51,10 @@ From a high-level perspective the application is structured as follow:
 
 - **The web UI frontend** This layer offers a (very!!!!) basic UI for sending emails.
 
-- **The backend REST layer** This layer offers a simple and generic REST POST endpoint for sending email messages. This layer is also responsible for publishing (in a synchronous fashion) the email messages to the message queue. 
-- **The backend email sender layer**  This layer consumes email messages from the Pub/Sub message queue (via push mechanism, this is required because of the App Engine nature). Then, it submits the email using one of the available email providers. If there is no email provider available for sending the email, the message is kept in the queue: Pub/Sub will retry to deliver the message again after 60 seconds. In this way, no messages are lost on their way to the recipient if both the email providers are not available or if the entire layer is down.
+- **The backend REST layer** This layer offers a simple and generic REST POST endpoint for sending email messages. This layer is also responsible for storing the email in the storage layer and publishing ~~(in a asynchronous fashion)~~ the email messages to the message queue. 
+- **The backend email sender layer**  This layer consumes email messages from the Pub/Sub message queue (via push mechanism, this is required because of the App Engine nature). Then, it submits the email using one of the available email providers. If there is no email provider available for sending the email, the message is kept in the queue: Pub/Sub will retry to deliver the message again after 60 seconds. In this way, no messages are lost on their way to the recipient if both the email providers are not available or if the entire layer is down. This layer also updates the status of the emails in the storage layer (i.e., ENQUEUED, PENDING, SENT).
 - **The Pub/Sub message queue** That acts as the backbone of the application and its components.
-
+- **A Datastore NoSQL storage layer** Used to store the email traffic.
 For sake of simplicity, the application comes as a single deployable unit (and code base), but the above components might be deployed separately (the frontend should **definitely** be deployed **separately** and probably lives in a completely different project). 
 
 This architecture can scale horizontally very well: we might want to scale-out one or more of the listed components, for example, in order to handle a massive load of requests.

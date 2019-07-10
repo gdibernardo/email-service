@@ -63,7 +63,8 @@ public class EmailRestController {
         } catch (NumberFormatException exception) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ResponseMessage("Email id does not have a valid format.", HttpStatus.BAD_REQUEST.value()));
         } catch (EntityNotFoundException exception) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ResponseMessage("Email Service cannot find such email id.", HttpStatus.BAD_REQUEST.value()));
+        //  Email identifier should be returned too.
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ResponseMessage("Email Service cannot find such email id.", HttpStatus.NOT_FOUND.value()));
         } catch (DatastoreFailureException exception) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ResponseMessage("Something went wrong while fetching the status.", HttpStatus.INTERNAL_SERVER_ERROR.value()));
         }
